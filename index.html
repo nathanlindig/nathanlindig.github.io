@@ -525,7 +525,7 @@
       }
     }
 
-    /* ── Nav accent line on section entry ──────────────────────────────────── */
+    /* -- Nav accent line on section entry ------------------------------------ */
     nav {
       transition: border-color 0.5s ease;
     }
@@ -538,7 +538,7 @@
       color: #d4af37;
     }
 
-    /* ── Hamburger button ───────────────────────────────────────────────────── */
+    /* -- Hamburger button ----------------------------------------------------- */
     .nav-hamburger {
       display: flex;
       flex-direction: column;
@@ -575,7 +575,7 @@
       transform: translateY(-7px) rotate(-45deg);
     }
 
-    /* ── Mobile nav overlay ─────────────────────────────────────────────────── */
+    /* -- Mobile nav overlay --------------------------------------------------- */
     .mobile-nav-overlay {
       position: fixed;
       inset: 0;
@@ -611,7 +611,7 @@
       color: #d4af37;
     }
 
-    /* ── Scroll entrance — fade-up ──────────────────────────────────────────── */
+    /* -- Scroll entrance — fade-up -------------------------------------------- */
     .will-enter {
       opacity: 0;
       transform: translateY(22px);
@@ -623,7 +623,7 @@
       transform: translateY(0);
     }
 
-    /* ── Scroll entrance — clip-path title wipe (rises from below) ───────────── */
+    /* -- Scroll entrance — clip-path title wipe (rises from below) ------------- */
     .reveal-title {
       clip-path: inset(100% 0 0 0);
       /* clips from the TOP — element is hidden */
@@ -634,12 +634,12 @@
     }
 
     .reveal-title.entered {
-      clip-path: inset(0 0 0 0);
-      /* fully visible */
+      clip-path: inset(-4px -12px -4px -12px);
+      /* fully visible — negative inset accommodates italic overhang */
       transform: translateY(0);
     }
 
-    /* ── Uniform skill tags ─────────────────────────────────────────────────── */
+    /* -- Uniform skill tags --------------------------------------------------- */
     #skills .rounded-full {
       background: rgba(255, 255, 255, 0.06) !important;
       border-color: rgba(255, 255, 255, 0.13) !important;
@@ -655,20 +655,234 @@
       color: #ffffff !important;
     }
 
-    /* ── Career Timeline overrides ──────────────────────────────────────────── */
+    /* -- Career Timeline overrides -------------------------------------------- */
     #timeline span.font-black {
       font-size: 1.5rem !important;
-      /* company names: text-xl → text-2xl */
+      /* company names: text-xl ? text-2xl */
     }
 
     #timeline .shrink-0 span {
       color: rgba(212, 175, 55, 0.9) !important;
-      /* dates → gold */
+      /* dates ? gold */
     }
 
     #timeline p.text-gray-400 {
       color: rgba(255, 255, 255, 0.72) !important;
-      /* descriptions → noticeably brighter */
+      /* descriptions ? noticeably brighter */
+    }
+
+    /* ============================================================
+       DESKTOP PROJECT GRID  (.proj-grid)
+    ============================================================ */
+    .proj-grid {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      .proj-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    /* Each row is a pair of two cards that flex against each other */
+    .proj-pair {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    /* Base card */
+    .pg-card {
+      flex: 1 1 0;
+      min-width: 0;
+      overflow: hidden;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #0d0d10;
+      cursor: pointer;
+      transition: flex 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity 0.38s ease,
+        border-color 0.25s ease;
+    }
+
+    .pg-card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    /* Active card expands; twin collapses */
+    .pg-card.pg-active {
+      flex: 2.5 1 0;
+      border-color: rgba(212, 175, 55, 0.28);
+      cursor: default;
+    }
+
+    .pg-card.pg-collapsed {
+      flex: 0 0 0;
+      padding-left: 0;
+      padding-right: 0;
+      border-left-width: 0;
+      border-right-width: 0;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Badge row */
+    .pg-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pg-category {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #d4af37;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+
+    .pg-date {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.38);
+      white-space: nowrap;
+    }
+
+    /* Card title */
+    .pg-title {
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      transition: font-size 0.38s ease, color 0.25s ease;
+    }
+
+    .pg-card.pg-active .pg-title {
+      font-size: 1.45rem;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    /* Teaser text */
+    .pg-teaser {
+      font-size: 0.78rem;
+      color: rgba(255, 255, 255, 0.48);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: color 0.25s ease;
+    }
+
+    .pg-card.pg-active .pg-teaser {
+      -webkit-line-clamp: unset;
+      overflow: visible;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+    }
+
+    /* "Click to expand" hint */
+    .pg-expand-hint {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(212, 175, 55, 0.5);
+      margin-top: 12px;
+      transition: opacity 0.2s ease;
+    }
+
+    .pg-card.pg-active .pg-expand-hint {
+      display: none;
+    }
+
+    /* Expandable detail area */
+    .pg-detail {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.38s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .pg-detail-inner {
+      overflow: hidden;
+    }
+
+    .pg-card.pg-active .pg-detail {
+      grid-template-rows: 1fr;
+    }
+
+    /* Tags inside expanded detail */
+    .pg-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 14px;
+      margin-bottom: 14px;
+    }
+
+    .pg-tag {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.38);
+      padding: 2px 8px;
+    }
+
+    /* Contribution block */
+    .pg-contrib {
+      border-left: 2px solid rgba(212, 175, 55, 0.4);
+      padding-left: 12px;
+      margin-bottom: 14px;
+    }
+
+    .pg-contrib-label {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(212, 175, 55, 0.75);
+      margin-bottom: 6px;
+    }
+
+    .pg-contrib-text {
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.65;
+    }
+
+    /* Collapse button */
+    .pg-close {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #d4af37;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 0;
+      margin-top: 4px;
+    }
+
+    .pg-close:hover {
+      color: #e8c84a;
     }
   </style>
 </head>
@@ -754,33 +968,38 @@
             <div class="hidden md:block w-px h-32 bg-brand-gold/20"></div>
             <div class="hidden md:flex flex-col gap-3 text-[10px] font-bold uppercase tracking-[0.25em] text-gray-600">
               <span>Character Technical Artist</span>
-              <span class="text-brand-gold/60">—</span>
-              <span>VR · Social · Real-time</span>
-              <span class="text-brand-gold/60">—</span>
-              <span>Pipeline · Tools · Art</span>
+              <span class="text-brand-gold/60">&middot;</span>
+              <span>VR &middot; Social &middot; Real-time</span>
+              <span class="text-brand-gold/60">&middot;</span>
+              <span>Pipeline &middot; Tools &middot; Art</span>
             </div>
           </div>
           <!-- Right column: body text, restrained sizing -->
           <div class="md:col-span-8 space-y-6">
             <p class="text-lg md:text-xl leading-relaxed font-light text-gray-200">
               I'm a Character Technical Artist wired to see the world through the eyes of an <span
-                class="text-brand-gold font-normal">artist</span> — but trained to think through problems like an <span
-                class="text-brand-gold font-normal">engineer</span>. Where an artist focuses on the result they want to
+                class="text-brand-gold font-normal">artist</span> &mdash; but trained to think through problems like an
+              <span class="text-brand-gold font-normal">engineer</span>. Where an artist focuses on the result they want
+              to
               create, I'm thinking about how to approach the problem and how to make the process better, easier, faster,
               and more enjoyable for everyone involved.
             </p>
             <p class="text-base text-gray-400 leading-relaxed">
-              My background spans every aspect of CG production — modeling, texturing, rigging, shading, pipeline
-              development, and tooling — across VR, social platforms, and real-time character systems. That breadth
+              My background spans every aspect of CG production &mdash; modeling, texturing, rigging, shading, pipeline
+              development, and tooling &mdash; across VR, social platforms, and real-time character systems. That
+              breadth
               gives me a unique ability to anticipate how a decision in one part of a pipeline ripples downstream, and
               to design solutions with that full context in mind.
             </p>
             <p class="text-base text-gray-400 leading-relaxed">
-              I don't settle for the tools in front of me. I'm always looking for new techniques and better approaches —
+              I don't settle for the tools in front of me. I'm always looking for new techniques and better approaches
+              &mdash;
               not just to grow my own capabilities, but to expand what's possible for the teams I serve. That same
               instinct extends to the people I work with: I can sit with an engineer and explain how an artist sees a
               problem, and I can sit with an artist and help them understand why constraints exist. Translation between
-              disciplines — in both directions — is something I do naturally, and it's one of the things I value most
+              disciplines &mdash; in both directions &mdash; is something I do naturally, and it's one of the things I
+              value
+              most
               about the work.
             </p>
           </div>
@@ -810,7 +1029,7 @@
               Correspondence</span>
             <span
               class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Python
-              · Maya API</span>
+              &middot; Maya API</span>
             <span
               class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Tool
               Development</span>
@@ -937,20 +1156,21 @@
               class="text-brand-gold font-normal">&amp;</span> Contributions</h2>
         </div>
 
-        <!-- Focus Carousel -->
-        <div class="proj-carousel-wrap">
+        <!-- Mobile Carousel — visible on mobile only -->
+        <div class="proj-carousel-wrap md:hidden">
           <div class="proj-carousel">
             <div class="proj-track" id="proj-track">
 
-              <!-- Card 0: Body Types & Clothing Update -->
+              <!-- Mobile Card 0: Body Types & Clothing Update -->
               <div class="proj-card" data-index="0">
                 <div class="proj-badge-row">
                   <span class="proj-category">Shipped</span>
                   <span class="proj-date-chip">July 30, 2025 &middot; Meta</span>
                 </div>
                 <h3 class="proj-title">Body Types &amp; Clothing Update</h3>
-                <p class="proj-teaser">Introduced customizable body type sliders and new clothing options across Meta's
-                  five platforms — built on a deformation transfer framework and proxy mesh system.</p>
+                <p class="proj-teaser">Shipped customizable body type sliders and new clothing across five Meta
+                  platforms, enabled by a novel deformation transfer system and proxy mesh system that handle clothing
+                  fit across infinite body combinations.</p>
                 <div class="proj-body">
                   <div class="proj-body-inner">
                     <div class="proj-tags">
@@ -959,619 +1179,207 @@
                       <span class="proj-tag">Platform</span>
                     </div>
                     <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Co-developed the mesh correspondence deformation transfer framework
-                        and designed a system of 11 proxy meshes enabling clothing to fit correctly across all new body
-                        type variations. Led bug triage for clothing and auto-fit issues during rollout, ensuring a
-                        clean launch across all five platforms.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Designed and
-                            built a system of 11 proxy meshes derived from four shape parameters (Relaxed, Flat Bum,
-                            Flat Bust, Uni-Leg) to address clothing fit artifacts — encoding how clothing fits across
-                            body volumes rather than following raw body surface geometry.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
-                            procedural proxy generation system using a deformation stack that automatically propagated
-                            blendshape targets to proxy meshes, with a headless Maya batch process for scalable
-                            execution.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led the skin
-                            weight application of the deformation transfer framework, restructuring the robust skin
-                            weight transfer method to work within the framework's four-phase architecture.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Drove
-                            prototyping of the Rigidify Attachments and Absorb Vector Offset correspondence operations
-                            in Python/Maya.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
-                            comprehensive mesh map generator and visualizer including curvature and correspondence-based
-                            quality maps.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led bug triage
-                            for clothing and auto-fit issues during the July 30, 2025 rollout across all five platforms.
-                          </li>
-                        </ul>
-                      </div>
+                      <p class="proj-contrib-label">Contribution</p>
+                      <p class="proj-contrib-text">Co-developed the deformation transfer framework and designed a system
+                        of 11 proxy meshes encoding how clothing fits across body volumes. Led bug triage during rollout
+                        across Facebook, Instagram, Messenger, WhatsApp, and Meta Horizon.</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Card 1: Style 2 Avatar -->
+              <!-- Mobile Card 1: Vendor Tooling -->
               <div class="proj-card" data-index="1">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">Late 2025&ndash;Jan 2026 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Vendor Tooling &mdash; External Pipeline Toolset</h3>
+                <p class="proj-teaser">Took Meta's internal clothing tooling and rebuilt it to run without internal
+                  libraries &mdash; then shipped it to three external vendor companies, onboarded their teams, and
+                  iterated
+                  through multiple rounds of feedback.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">End-to-End Ownership</span>
+                      <span class="proj-tag">Tools</span>
+                      <span class="proj-tag">Pipeline</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">Contribution</p>
+                      <p class="proj-contrib-text">Owned this end-to-end: scoped requirements, led a small TA team
+                        through development, shipped to ~15&ndash;30 external artists, wrote all documentation, and
+                        drove post-ship updates. The kind of project that requires knowing the pipeline deeply enough to
+                        explain it to someone who&rsquo;s never seen it.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mobile Card 2: Style 2 Avatar -->
+              <div class="proj-card" data-index="2">
                 <div class="proj-badge-row">
                   <span class="proj-category">Shipped</span>
                   <span class="proj-date-chip">Oct 1, 2024 &middot; Meta</span>
                 </div>
-                <h3 class="proj-title">Style 2 Avatar</h3>
-                <p class="proj-teaser">A complete overhaul of Meta's avatar system introducing an entirely new catalog
-                  of clothing and accessories across Horizon Worlds, Horizon Home, and Workrooms.</p>
+                <h3 class="proj-title">Style 2 Avatar &mdash; Clothing &amp; Accessories</h3>
+                <p class="proj-teaser">Meta's complete avatar overhaul, including an entirely new tech stack and
+                  clothing catalog launched across Meta products. I was involved from the first prototype to the day it
+                  shipped.</p>
                 <div class="proj-body">
                   <div class="proj-body-inner">
                     <div class="proj-tags">
                       <span class="proj-tag">Global Launch</span>
                       <span class="proj-tag">Avatar Systems</span>
-                      <span class="proj-tag">Platform</span>
+                      <span class="proj-tag">Pipeline</span>
                     </div>
                     <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Involved from the earliest prototyping stage through public launch —
-                        coordinating cross-functional feasibility evaluations, authoring technical requirements,
-                        directing skin weight production for ~80% of the catalog, leading mix and match QA across
-                        hundreds of asset combinations, and developing the initial procedural skin weight transfer
-                        system integrated into Meta's build pipeline.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Coordinated a
-                            cross-functional prototyping effort to evaluate production feasibility of Style 2 North Star
-                            imagery, resulting in a formal leadership green light establishing the execution strategy
-                            for an entirely new clothing catalog.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Authored
-                            technical requirements documentation for all Style 2 clothing assets; directed artists and
-                            art directors in developing artistic and stylistic guidance.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Provided
-                            feedback to Engineers and PMs on proprietary Auto-LOD, Auto-Fit, and garment layering
-                            systems — bridging engineering implementation and artistic intent.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led the
-                            redesign of mix and match strategy and technical guidance for Style 2, extending rules to
-                            account for new avatar body characteristics and deformation edge cases.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Directed a team
-                            of ~7 artists over ~1 month to manually produce skin weight data for ~80% of the Style 2
-                            catalog prior to launch.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed the
-                            initial procedural skin weight transfer system integrated into Meta's proprietary asset
-                            build pipeline.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led QA for mix
-                            and match compatibility across hundreds of clothing combinations, directly modifying 30+
-                            assets and advising development of a geometry culling system.</li>
-                        </ul>
-                      </div>
+                      <p class="proj-contrib-label">Contribution</p>
+                      <p class="proj-contrib-text">Ran the prototyping workstream that defined the execution strategy
+                        and technical requirements for clothing production, built the initial skin weight transfer
+                        system, directed ~7 artists through a month of manual skin weight production, and led mix and
+                        match QA across hundreds of asset combinations.</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Card 2: Horizon Worlds Full-Body Avatar Legs -->
-              <div class="proj-card" data-index="2">
+              <!-- Mobile Card 3: Deformation Transfer Framework -->
+              <div class="proj-card" data-index="3">
+                <div class="proj-badge-row">
+                  <span class="proj-category">R&amp;D</span>
+                  <span class="proj-date-chip">Oct 2024&ndash;Jan 2026 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Deformation Transfer Framework</h3>
+                <p class="proj-teaser">Built the foundational architecture that powers both auto-skinning and auto-fit
+                  for Meta's avatar clothing, using a surface-based mesh correspondence approach that was extensible and
+                  scalable.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">R&amp;D</span>
+                      <span class="proj-tag">Deformation Systems</span>
+                      <span class="proj-tag">Python / Maya</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">Contribution</p>
+                      <p class="proj-contrib-text">Co-developed the four-phase framework architecture (correspondence
+                        mapping, operations on correspondence data, transfer, and post-transfer refinement) and led the
+                        skin weight transfer component. The system handles the geometrically hard cases &mdash; armpits,
+                        crotches, complex layering &mdash; that naive proximity methods consistently fail on.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Mobile Card 4: Horizon Worlds Full-Body Avatar Legs -->
+              <div class="proj-card" data-index="4">
                 <div class="proj-badge-row">
                   <span class="proj-category">Shipped</span>
                   <span class="proj-date-chip">Sept 15, 2023 &middot; Meta</span>
                 </div>
                 <h3 class="proj-title">Horizon Worlds Full-Body Avatar Legs</h3>
                 <p class="proj-teaser">Meta's first full-body avatar system in VR, introducing animated legs across
-                  Horizon Worlds — requiring a clothing readiness effort across 100+ assets to ship.</p>
+                  Horizon Worlds, requiring a comprehensive clothing audit and remediation effort across 100+ assets to
+                  ship.</p>
                 <div class="proj-body">
                   <div class="proj-body-inner">
                     <div class="proj-tags">
-                      <span class="proj-tag">Global Launch</span>
+                      <span class="proj-tag">Launch-Blocking</span>
                       <span class="proj-tag">VR</span>
-                      <span class="proj-tag">Clothing Pipeline</span>
+                      <span class="proj-tag">Clothing</span>
+                      <span class="proj-tag">Pipeline</span>
                     </div>
                     <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Led the critical launch-blocking clothing readiness effort — auditing
+                      <p class="proj-contrib-label">Contribution</p>
+                      <p class="proj-contrib-text">Led the critical launch-blocking clothing readiness effort, auditing
                         and updating 100+ assets across all five clothing categories, conducting deformation QA across
                         animations and LODs, and redesigning the skirt skin weight transfer pipeline from a manual
                         process into a batch-processable procedural system.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Audited and
-                            updated 100+ clothing assets across all five categories (tops, bottoms, footwear,
-                            one-pieces, outfits) for deformation compatibility with the new full-body rig.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Conducted QA
-                            art reviews across animations, viewing angles, and LODs to ensure no asset would place users
-                            in a visually compromised position under any in-game condition.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Redesigned the
-                            skirt skin weight transfer pipeline from a manual per-asset process into a batch-processable
-                            procedural system, eliminating quality inconsistency risk across the catalog.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Performed bug
-                            fixing on clothing assets that failed quality checks, ensuring all assets met Meta's
-                            shipping quality standard in time for launch.</li>
-                        </ul>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Card 3: Avatar Hair System Overhaul -->
-              <div class="proj-card" data-index="3">
+              <!-- Mobile Card 5: Avatar Hair System Overhaul -->
+              <div class="proj-card" data-index="5">
                 <div class="proj-badge-row">
                   <span class="proj-category">Shipped</span>
                   <span class="proj-date-chip">Apr 27, 2023 &middot; Meta</span>
                 </div>
                 <h3 class="proj-title">Avatar Hair System Overhaul</h3>
-                <p class="proj-teaser">Full catalog migration from stylized normal-transfer rendering to realistic
-                  anisotropic shading, rolling out across all Meta avatar surfaces.</p>
+                <p class="proj-teaser">Migrated every hair asset in Meta's avatar catalog from stylized normal-transfer
+                  rendering to realistic anisotropic shading &mdash; sitting between art leadership and engineering to
+                  make it actually work.</p>
                 <div class="proj-body">
                   <div class="proj-body-inner">
                     <div class="proj-tags">
                       <span class="proj-tag">Global Launch</span>
                       <span class="proj-tag">Rendering</span>
-                      <span class="proj-tag">Platform</span>
+                      <span class="proj-tag">Art / Engineering Bridge</span>
                     </div>
                     <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Served as the primary technical-artistic bridge between art
-                        leadership and engineering — defining the new texture map format for anisotropic shading,
-                        developing Substance Painter tooling for flow map authoring and seam visualization, and
-                        contributing to complementary shading solutions for coily and curly hair types.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Served as
-                            primary technical-artistic bridge between art leadership and engineering for the full
-                            catalog hair system overhaul.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Defined a new
-                            texture map format for anisotropic shading — repurposing the ORM map (Cavity, Roughness,
-                            Strand Detail + grayscale flow map in alpha) — keeping texture count the same while adding
-                            directional shading data.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
-                            Substance Painter filter layer converting RGB flow maps to grayscale in real time, enabling
-                            artists to visualize and reposition the wraparound seam during authoring.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Identified that
-                            anisotropic shading was less effective for coily/curly hair and contributed to the
-                            development of complementary rim light approximation shaders.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Documented
-                            ideal parameter ranges and value combinations for specific hair styles as a foundational
-                            reference for artists applying the new system across the full catalog.</li>
-                        </ul>
-                      </div>
+                      <p class="proj-contrib-label">Contribution</p>
+                      <p class="proj-contrib-text">Defined the new texture map format, developed the Substance Painter
+                        tooling that made it possible for artists to author it correctly, and identified where the
+                        approach broke down for coily and curly hair &mdash; then contributed to the solution for those
+                        cases too.</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Card 4: Avatars Store Mix & Match -->
-              <div class="proj-card" data-index="4">
-                <div class="proj-badge-row">
-                  <span class="proj-category">Shipped</span>
-                  <span class="proj-date-chip">Jun 2022 &middot; Meta</span>
-                </div>
-                <h3 class="proj-title">Avatars Store &mdash; Mix &amp; Match</h3>
-                <p class="proj-teaser">Launched Meta's mix and match clothing system — enabling users to freely combine
-                  separate tops, bottoms, and footwear for the first time.</p>
-                <div class="proj-body">
-                  <div class="proj-body-inner">
-                    <div class="proj-tags">
-                      <span class="proj-tag">Global Launch</span>
-                      <span class="proj-tag">Clothing Pipeline</span>
-                      <span class="proj-tag">Platform</span>
-                    </div>
-                    <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Contributed to migrating a significant portion of the outfit catalog
-                        from combined outfits to mix and match separates, and helped validate and iterate on the guide
-                        mesh system governing how clothing categories layered together — establishing early ownership of
-                        a role that expanded significantly in subsequent years.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Contributed to
-                            migrating a significant portion of the existing outfit catalog from fully combined outfits
-                            into mix and match separates (tops, bottoms, footwear) compatible with the new system.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Validated and
-                            iterated on the mix and match guide mesh system based on cross-team artist feedback,
-                            establishing early ownership of guides that would expand significantly in the full-time
-                            role.</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 5: Meta Avatar Rollout to Instagram -->
-              <div class="proj-card" data-index="5">
-                <div class="proj-badge-row">
-                  <span class="proj-category">Shipped</span>
-                  <span class="proj-date-chip">Jan 31, 2022 &middot; Meta</span>
-                </div>
-                <h3 class="proj-title">Meta Avatar Rollout to Instagram</h3>
-                <p class="proj-teaser">Meta's first expansion of avatars to Instagram Stories and DMs, alongside a
-                  comprehensive overhaul of avatar facial feature shapes.</p>
-                <div class="proj-body">
-                  <div class="proj-body-inner">
-                    <div class="proj-tags">
-                      <span class="proj-tag">Global Launch</span>
-                      <span class="proj-tag">Avatar Systems</span>
-                      <span class="proj-tag">Platform</span>
-                    </div>
-                    <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Personally sculpted 40+ facial feature shapes across face, nose,
-                        mouth, and eye categories — going through multiple rounds of art leadership review to meet the
-                        quality and representation bar required for Meta's first avatar expansion to Instagram.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Personally
-                            sculpted 40+ facial feature shapes (12 face shapes, 12 nose shapes including addition of
-                            nostrils, 5 mouth shapes, 12+ eye shapes) through multiple rounds of art leadership review.
-                          </li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Collaborated
-                            with another TA on a rig-driven eye shape system; the rig procedurally generated animation
-                            shapes (open/close) for each eye variant, ensuring correct performance across all options.
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 6: Horizon Worlds Launch -->
+              <!-- Mobile Card 6: Meta Avatar System Initial Launch -->
               <div class="proj-card" data-index="6">
                 <div class="proj-badge-row">
                   <span class="proj-category">Shipped</span>
-                  <span class="proj-date-chip">Dec 9, 2021 &middot; Meta</span>
+                  <span class="proj-date-chip">Dec 2021&ndash;Jan 2022 &middot; Meta</span>
                 </div>
-                <h3 class="proj-title">Horizon Worlds Launch</h3>
-                <p class="proj-teaser">The public launch of Horizon Worlds and the new Oculus Avatar system, supported
-                  by pipeline tooling for hair, facial hair, and clothing assets.</p>
+                <h3 class="proj-title">Meta Avatar System &mdash; Initial Launch</h3>
+                <p class="proj-teaser">The launch of Horizon Worlds and the Meta Avatar system in December 2021,
+                  followed six weeks later by Meta's first avatar rollout to Instagram. Pipeline tooling for the first;
+                  face-shape catalog sculpting for the second.</p>
                 <div class="proj-body">
                   <div class="proj-body-inner">
                     <div class="proj-tags">
                       <span class="proj-tag">Global Launch</span>
                       <span class="proj-tag">VR</span>
-                      <span class="proj-tag">Platform</span>
+                      <span class="proj-tag">Avatar Systems</span>
                     </div>
                     <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Developed three Maya GUI tools adopted as production pipeline
-                        standards: a sideburn conforming tool for seamless hair and facial hair connections, a normal
-                        transfer tool for stylized hair rendering, and a material setup tool automating texture node
-                        wiring across asset types.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
-                            sideburn conforming tool automating the steps needed to ensure seamless hair and facial hair
-                            connections across all combinations.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
-                            normal transfer tool allowing artists to blend between original and transferred normal
-                            values to control the degree of stylization.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
-                            material setup tool that scanned scene meshes to detect asset type and automatically handled
-                            material creation and texture node wiring.</li>
-                        </ul>
-                      </div>
+                      <p class="proj-contrib-label">Contribution</p>
+                      <p class="proj-contrib-text">Built three Maya GUI tools that improved artist efficiency and helped
+                        de-risk launch blocking efforts for the Horizon Worlds launch. Personally sculpted 40+ facial
+                        feature shape updates as part of an overhaul of the facial feature catalog for the Instagram
+                        rollout.</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Card 7: Baba Yaga -->
+              <!-- Mobile Card 7: Baba Yaga -->
               <div class="proj-card" data-index="7">
                 <div class="proj-badge-row">
                   <span class="proj-category">Shipped</span>
-                  <span class="proj-date-chip">2021 &middot; Baobab Studios</span>
+                  <span class="proj-date-chip">2019&ndash;2021 &middot; Baobab Studios</span>
                 </div>
                 <h3 class="proj-title">Baba Yaga</h3>
-                <p class="proj-teaser">An immersive interactive VR animated experience — contributed across
-                  environments, rigging, shading, tooling, and in-engine integration.</p>
+                <p class="proj-teaser">An Emmy award-winning immersive interactive VR experience. I entered as a
+                  generalist intern and ended up owning environments, prop rigging, modeling, shading, tooling, and
+                  in-engine integration across the full production.</p>
                 <div class="proj-body">
                   <div class="proj-body-inner">
                     <div class="proj-tags">
-                      <span class="proj-tag">VR</span>
-                      <span class="proj-tag">Film</span>
+                      <span class="proj-tag">VR Film</span>
+                      <span class="proj-tag">Generalist</span>
                       <span class="proj-tag">Interactive</span>
-                      <span class="proj-tag">Environments</span>
-                      <span class="proj-tag">Rigging</span>
-                      <span class="proj-tag">Shading</span>
                     </div>
                     <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Contributed across the full production lifecycle as a generalist —
-                        serving as lead environment artist for one of the project's most complex interactive
-                        environments, building character rigs for Baobab's proprietary deformation system, developing a
-                        custom multi-lighting-scenario blend shader, and handling in-engine setup for roughly 80% of the
-                        project's environments.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Created
-                            environment models and textures for several sections from scratch; served as lead
-                            environment artist for one of the most complex interactive environments produced by the
-                            studio.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Responsible for
-                            in-engine setup of ~80% of Baba Yaga's environments — importing assets, building prefabs,
-                            composing scenes, and tuning shader parameters for VR headset viewing.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Built
-                            simplified in-engine character rigs for Baobab's proprietary two-tier deformation system,
-                            enabling high-fidelity Maya performance to be approximated in Unity within VR budgets.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
-                            custom shader blending between multiple baked lighting scenario texture maps, enabling
-                            dynamic lighting changes without real-time light sources.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Formalized
-                            scattered export scripts into a structured Maya GUI tool, simplifying the proprietary
-                            rigging data export process for the team.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Created all
-                            major interactive and dynamic props for the project in Unity.</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 8: Vendor Tooling -->
-              <div class="proj-card" data-index="8">
-                <div class="proj-badge-row">
-                  <span class="proj-category">Shipped</span>
-                  <span class="proj-date-chip">Late 2025&ndash;Jan 2026 &middot; Meta</span>
-                </div>
-                <h3 class="proj-title">Vendor Tooling &mdash; External Pipeline Toolset</h3>
-                <p class="proj-teaser">A Maya-based toolset exposing Meta's internal clothing pipeline to external
-                  vendors — enabling 15–30 artists across three companies to produce assets within Meta's pipeline.</p>
-                <div class="proj-body">
-                  <div class="proj-body-inner">
-                    <div class="proj-tags">
-                      <span class="proj-tag">Shipped</span>
-                      <span class="proj-tag">Tools</span>
-                      <span class="proj-tag">Pipeline</span>
-                    </div>
-                    <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Led end-to-end development from requirements scoping through
-                        shipping, onboarding, and iterative updates — refactoring internal code to function without
-                        internal libraries and writing new tooling for previously manual or complex processes. Oversaw a
-                        small team of TAs and completed multiple rounds of updates based on vendor feedback.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Conducted a
-                            comprehensive evaluation of every technical requirement for clothing assets and audited what
-                            internal tooling existed, establishing the full scope of features needed in the vendor
-                            toolset.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led a small
-                            team of TAs to develop Maya-based GUI tools, restructuring existing internal code to
-                            function without internal libraries.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Wrote new
-                            tooling for features covering previously manual, complex, or confusing processes —
-                            particularly for less technical users.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Shipped tooling
-                            to vendors, provided detailed demonstrations and onboarding documentation, and completed
-                            multiple rounds of feature updates and bug fixes based on vendor feedback.</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 9: Deformation Transfer Framework -->
-              <div class="proj-card" data-index="9">
-                <div class="proj-badge-row">
-                  <span class="proj-category">R&amp;D</span>
-                  <span class="proj-date-chip">Oct 2024&ndash;Jan 2026 &middot; Meta</span>
-                </div>
-                <h3 class="proj-title">Deformation Transfer Framework</h3>
-                <p class="proj-teaser">A Python/Maya mesh correspondence framework serving as the foundational
-                  architecture for both auto-skinning and auto-fit systems for avatar clothing.</p>
-                <div class="proj-body">
-                  <div class="proj-body-inner">
-                    <div class="proj-tags">
-                      <span class="proj-tag">R&amp;D</span>
-                      <span class="proj-tag">Deformation Systems</span>
-                      <span class="proj-tag">Pipeline</span>
-                    </div>
-                    <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Co-developed the framework's four-phase architecture (correspondence,
-                        operations, transfer, post-transfer refinement) and led the skin weight application layer. Drove
-                        prototyping of the Rigidify Attachments and Absorb Vector Offset operators, and built a
-                        comprehensive mesh map generator and visualizer.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Co-developed a
-                            mesh correspondence framework in Python/Maya architected around four phases: mesh
-                            correspondence, operations on correspondence data, transfer, and post-transfer refinement.
-                          </li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led the skin
-                            weight application layer, restructuring the robust skin weight transfer method to work
-                            within the new framework architecture.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Drove
-                            prototyping of the Rigidify Attachments operator (making groups of points deform as a unit —
-                            useful for hard surface details like buttons and buckles) and the Absorb Vector Offset
-                            operator (blending the destination mesh closer to the source surface for improved fit).</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Built a
-                            comprehensive mesh map generator and visualizer including Normal Divergence Curvature,
-                            Second Derivative Surface Curvature, and correspondence-based quality maps.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed
-                            heuristic combination maps compositing multiple individual maps using AND/OR operators,
-                            enabling compound quality signals for more nuanced operator control.</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 10: Robust Skin Weight Transfer R&D -->
-              <div class="proj-card" data-index="10">
-                <div class="proj-badge-row">
-                  <span class="proj-category">R&amp;D</span>
-                  <span class="proj-date-chip">2023&ndash;2024 &middot; Meta</span>
-                </div>
-                <h3 class="proj-title">Robust Skin Weight Transfer &mdash; R&amp;D</h3>
-                <p class="proj-teaser">R&amp;D effort replacing world space skin weight transfer with surface-based mesh
-                  correspondence to address limitations in geometrically ambiguous regions like armpits and crotches.
-                </p>
-                <div class="proj-body">
-                  <div class="proj-body-inner">
-                    <div class="proj-tags">
-                      <span class="proj-tag">R&amp;D</span>
-                      <span class="proj-tag">Deformation Systems</span>
-                      <span class="proj-tag">Skinning</span>
-                    </div>
-                    <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Led the strategy and direction for exploring robust skin weight
-                        transfer as the replacement solution. Guided a collaborative effort that produced a working
-                        Python/Maya implementation integrated into Meta's internal skin weight transfer tooling — used
-                        by artists prior to launch and forming the basis of the longer-term build pipeline integration
-                        plan.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Identified
-                            structural limitations of the initial world space-based skin weight transfer system —
-                            particularly in armpits and crotch regions where world space proximity produces unreliable
-                            weight assignments.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led the
-                            strategy and direction for exploring robust skin weight transfer as the replacement — using
-                            surface-based correspondence rather than world space proximity.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Guided a
-                            collaborative effort that produced a working Python implementation integrated into Meta's
-                            internal Maya skin weight transfer tooling, making it available to artists prior to launch.
-                          </li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed an
-                            action plan for integrating robust skin weight transfer into the build pipeline with
-                            sufficient detail to be executed quickly once engineering resources became available.</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Card 11: New VR Project Pre-Production -->
-              <div class="proj-card" data-index="11">
-                <div class="proj-badge-row">
-                  <span class="proj-category">R&amp;D</span>
-                  <span class="proj-date-chip">2020&ndash;2021 &middot; Baobab Studios</span>
-                </div>
-                <h3 class="proj-title">New VR Project &mdash; Pre-Production</h3>
-                <p class="proj-teaser">Early pre-production at Baobab Studios — prototyping VR character performance,
-                  developing toon shading, and exploring large-scale traversable terrain design.</p>
-                <div class="proj-body">
-                  <div class="proj-body-inner">
-                    <div class="proj-tags">
-                      <span class="proj-tag">R&amp;D</span>
-                      <span class="proj-tag">VR</span>
-                      <span class="proj-tag">Shading</span>
-                    </div>
-                    <div class="proj-contrib">
-                      <p class="proj-contrib-label">My Contribution</p>
-                      <p class="proj-contrib-text">Prototyped character concept feasibility within VR platform
-                        constraints, personally implemented toon shading using shader graphs, and explored terrain
-                        design and asset population strategies for large-scale VR environments — contributing to both
-                        the technical and artistic direction of the project.</p>
-                    </div>
-                    <button class="proj-details-btn">Details +</button>
-                    <div class="proj-details">
-                      <div class="proj-details-inner">
-                        <ul class="space-y-3 text-sm text-gray-300">
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Prototyped the
-                            performance capabilities and technical implications of the art team's character concept
-                            work, evaluating feasibility within VR platform constraints.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Refined the art
-                            direction through evaluating its technical implications and the limitations of the release
-                            platform.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Personally
-                            implemented toon shading inspired by woven/knit/fabric materials using shader graphs within
-                            VR performance constraints.</li>
-                          <li class="flex items-start"><span
-                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Explored
-                            traversable terrain design and LOD strategies at a scale previously untackled by the studio
-                            — experimenting with level layout, asset population, and performance-conscious environment
-                            construction.</li>
-                        </ul>
-                      </div>
+                      <p class="proj-contrib-label">Contribution</p>
+                      <p class="proj-contrib-text">Lead environment artist on the project's most complex interactive
+                        environment. Responsible for a majority of the prop and environment modeling and texturing work,
+                        in-engine setup of ~80% of all environments, all prop rigs, and several tooling efforts.</p>
                     </div>
                   </div>
                 </div>
@@ -1581,14 +1389,14 @@
           </div><!-- end .proj-carousel -->
         </div><!-- end .proj-carousel-wrap -->
 
-        <!-- Navigation -->
-        <div class="proj-nav">
+        <!-- Navigation (mobile only) -->
+        <div class="proj-nav md:hidden">
           <button aria-label="Previous project" class="proj-nav-btn" id="proj-prev">
             <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="16">
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
-          <span class="proj-counter" id="proj-counter">1 / 12</span>
+          <span class="proj-counter" id="proj-counter">1 / 8</span>
           <button aria-label="Next project" class="proj-nav-btn" id="proj-next">
             <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="16">
               <path d="M9 18l6-6-6-6" />
@@ -1596,8 +1404,246 @@
           </button>
         </div>
 
+        <!-- Desktop Grid (2 rows x 4 cards) -->
+        <div class="proj-grid" id="proj-grid">
+
+          <!-- Row 1: Cards 0-3 -->
+          <div class="proj-pair">
+            <div class="pg-card" data-index="0">
+              <div class="pg-badge-row">
+                <span class="pg-category">Shipped</span>
+                <span class="pg-date">July 30, 2025</span>
+              </div>
+              <h3 class="pg-title">Body Types &amp; Clothing Update</h3>
+              <p class="pg-teaser">Shipped customizable body type sliders and new clothing across five Meta platforms,
+                enabled by a novel deformation transfer system and proxy mesh system that handle clothing fit across
+                infinite body combinations.</p>
+              <p class="pg-expand-hint">Click to expand</p>
+              <div class="pg-detail">
+                <div class="pg-detail-inner">
+                  <div class="pg-tags">
+                    <span class="pg-tag">Global Launch</span>
+                    <span class="pg-tag">Deformation Systems</span>
+                    <span class="pg-tag">Platform</span>
+                  </div>
+                  <div class="pg-contrib">
+                    <p class="pg-contrib-label">Contribution</p>
+                    <p class="pg-contrib-text">Co-developed the deformation transfer framework, leveraging advanced mesh
+                      correspondence techniques, and designed a system of 11 proxy meshes that together encoded how
+                      clothing fits across body volumes. Led bug triage during rollout across Facebook, Instagram,
+                      Messenger, WhatsApp, and Meta Horizon.</p>
+                  </div>
+                  <button class="pg-close">Collapse &times;</button>
+                </div>
+              </div>
+            </div>
+            <div class="pg-card" data-index="1">
+              <div class="pg-badge-row">
+                <span class="pg-category">Shipped</span>
+                <span class="pg-date">Late 2025 &ndash; Jan 2026</span>
+              </div>
+              <h3 class="pg-title">Vendor Tooling &mdash; External Pipeline Toolset</h3>
+              <p class="pg-teaser">Took Meta's internal clothing tooling and rebuilt it to run without internal
+                libraries &mdash; then shipped it to three external vendor companies, onboarded their teams, and
+                iterated
+                through multiple rounds of feedback.</p>
+              <p class="pg-expand-hint">Click to expand</p>
+              <div class="pg-detail">
+                <div class="pg-detail-inner">
+                  <div class="pg-tags">
+                    <span class="pg-tag">End-to-End Ownership</span>
+                    <span class="pg-tag">Tools</span>
+                    <span class="pg-tag">Pipeline</span>
+                  </div>
+                  <div class="pg-contrib">
+                    <p class="pg-contrib-label">Contribution</p>
+                    <p class="pg-contrib-text">Owned this end-to-end: scoped requirements, led a small TA team through
+                      development, shipped to ~15&ndash;30 external artists, wrote all documentation, and drove
+                      post-ship updates. The kind of project that requires knowing the pipeline deeply enough to explain
+                      it to someone who&rsquo;s never seen it.</p>
+                  </div>
+                  <button class="pg-close">Collapse &times;</button>
+                </div>
+              </div>
+            </div>
+            <div class="pg-card" data-index="2">
+              <div class="pg-badge-row">
+                <span class="pg-category">Shipped</span>
+                <span class="pg-date">October 1, 2024</span>
+              </div>
+              <h3 class="pg-title">Style 2 Avatar &mdash; Clothing &amp; Accessories</h3>
+              <p class="pg-teaser">Meta's complete avatar overhaul, including an entirely new tech stack and clothing
+                catalog launched across Meta products. I was involved from the first prototype to the day it shipped.
+              </p>
+              <p class="pg-expand-hint">Click to expand</p>
+              <div class="pg-detail">
+                <div class="pg-detail-inner">
+                  <div class="pg-tags">
+                    <span class="pg-tag">Global Launch</span>
+                    <span class="pg-tag">Avatar Systems</span>
+                    <span class="pg-tag">Pipeline</span>
+                  </div>
+                  <div class="pg-contrib">
+                    <p class="pg-contrib-label">Contribution</p>
+                    <p class="pg-contrib-text">Ran the prototyping workstream that defined the execution strategy and
+                      technical requirements for clothing production, built the initial skin weight transfer system,
+                      directed ~7 artists through a month of manual skin weight production, and led mix and match QA
+                      across hundreds of asset combinations.</p>
+                  </div>
+                  <button class="pg-close">Collapse &times;</button>
+                </div>
+              </div>
+            </div>
+            <div class="pg-card" data-index="3">
+              <div class="pg-badge-row">
+                <span class="pg-category">R&amp;D</span>
+                <span class="pg-date">Oct 2024 &ndash; Jan 2026</span>
+              </div>
+              <h3 class="pg-title">Deformation Transfer Framework</h3>
+              <p class="pg-teaser">Built the foundational architecture that powers both auto-skinning and auto-fit for
+                Meta's avatar clothing, using a surface-based mesh correspondence approach that was extensible and
+                scalable.</p>
+              <p class="pg-expand-hint">Click to expand</p>
+              <div class="pg-detail">
+                <div class="pg-detail-inner">
+                  <div class="pg-tags">
+                    <span class="pg-tag">R&amp;D</span>
+                    <span class="pg-tag">Deformation Systems</span>
+                    <span class="pg-tag">Python / Maya</span>
+                  </div>
+                  <div class="pg-contrib">
+                    <p class="pg-contrib-label">Contribution</p>
+                    <p class="pg-contrib-text">Co-developed the four-phase framework architecture (correspondence
+                      mapping, operations on correspondence data, transfer, and post-transfer refinement) and led the
+                      skin weight transfer component. The system handles the geometrically hard cases &mdash; armpits,
+                      crotches, complex layering &mdash; that naive proximity methods consistently fail on.</p>
+                  </div>
+                  <button class="pg-close">Collapse &times;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Cards 4-7 -->
+          <div class="proj-pair">
+            <div class="pg-card" data-index="4">
+              <div class="pg-badge-row">
+                <span class="pg-category">Shipped</span>
+                <span class="pg-date">September 15, 2023</span>
+              </div>
+              <h3 class="pg-title">Horizon Worlds Full-Body Avatar Legs</h3>
+              <p class="pg-teaser">Meta's first full-body avatar system in VR, introducing animated legs across Horizon
+                Worlds, requiring a comprehensive clothing audit and remediation effort across 100+ assets to ship.</p>
+              <p class="pg-expand-hint">Click to expand</p>
+              <div class="pg-detail">
+                <div class="pg-detail-inner">
+                  <div class="pg-tags">
+                    <span class="pg-tag">Launch-Blocking</span>
+                    <span class="pg-tag">VR</span>
+                    <span class="pg-tag">Clothing</span>
+                    <span class="pg-tag">Pipeline</span>
+                  </div>
+                  <div class="pg-contrib">
+                    <p class="pg-contrib-label">Contribution</p>
+                    <p class="pg-contrib-text">Led the critical launch-blocking clothing readiness effort, auditing and
+                      updating 100+ assets across all five clothing categories, conducting deformation QA across
+                      animations and LODs, and redesigning the skirt skin weight transfer pipeline from a manual process
+                      into a batch-processable procedural system.</p>
+                  </div>
+                  <button class="pg-close">Collapse &times;</button>
+                </div>
+              </div>
+            </div>
+            <div class="pg-card" data-index="5">
+              <div class="pg-badge-row">
+                <span class="pg-category">Shipped</span>
+                <span class="pg-date">April 27, 2023</span>
+              </div>
+              <h3 class="pg-title">Avatar Hair System Overhaul</h3>
+              <p class="pg-teaser">Migrated every hair asset in Meta's avatar catalog from stylized normal-transfer
+                rendering to realistic anisotropic shading &mdash; sitting between art leadership and engineering to
+                make it actually work.</p>
+              <p class="pg-expand-hint">Click to expand</p>
+              <div class="pg-detail">
+                <div class="pg-detail-inner">
+                  <div class="pg-tags">
+                    <span class="pg-tag">Global Launch</span>
+                    <span class="pg-tag">Rendering</span>
+                    <span class="pg-tag">Art / Engineering Bridge</span>
+                  </div>
+                  <div class="pg-contrib">
+                    <p class="pg-contrib-label">Contribution</p>
+                    <p class="pg-contrib-text">Defined the new texture map format, developed the Substance Painter
+                      tooling that made it possible for artists to author it correctly, and identified where the
+                      approach broke down for coily and curly hair &mdash; then contributed to the solution for those
+                      cases too.</p>
+                  </div>
+                  <button class="pg-close">Collapse &times;</button>
+                </div>
+              </div>
+            </div>
+            <div class="pg-card" data-index="6">
+              <div class="pg-badge-row">
+                <span class="pg-category">Shipped</span>
+                <span class="pg-date">Dec 2021 &ndash; Jan 2022</span>
+              </div>
+              <h3 class="pg-title">Meta Avatar System &mdash; Initial Launch</h3>
+              <p class="pg-teaser">The launch of Horizon Worlds and the Meta Avatar system in December 2021, followed
+                six weeks later by Meta's first avatar rollout to Instagram. Pipeline tooling for the first; face-shape
+                catalog sculpting for the second.</p>
+              <p class="pg-expand-hint">Click to expand</p>
+              <div class="pg-detail">
+                <div class="pg-detail-inner">
+                  <div class="pg-tags">
+                    <span class="pg-tag">Global Launch</span>
+                    <span class="pg-tag">VR</span>
+                    <span class="pg-tag">Avatar Systems</span>
+                  </div>
+                  <div class="pg-contrib">
+                    <p class="pg-contrib-label">Contribution</p>
+                    <p class="pg-contrib-text">Built three Maya GUI tools that improved artist efficiency and helped
+                      de-risk launch blocking efforts for the Horizon Worlds launch. Personally sculpted 40+ facial
+                      feature shape updates as part of an overhaul of the facial feature catalog for the Instagram
+                      rollout.</p>
+                  </div>
+                  <button class="pg-close">Collapse &times;</button>
+                </div>
+              </div>
+            </div>
+            <div class="pg-card" data-index="7">
+              <div class="pg-badge-row">
+                <span class="pg-category">Shipped</span>
+                <span class="pg-date">2019 &ndash; 2021 &middot; Baobab Studios</span>
+              </div>
+              <h3 class="pg-title">Baba Yaga</h3>
+              <p class="pg-teaser">An Emmy award-winning immersive interactive VR experience. I entered as a generalist
+                intern and ended up owning environments, prop rigging, modeling, shading, tooling, and in-engine
+                integration across the full production.</p>
+              <p class="pg-expand-hint">Click to expand</p>
+              <div class="pg-detail">
+                <div class="pg-detail-inner">
+                  <div class="pg-tags">
+                    <span class="pg-tag">VR Film</span>
+                    <span class="pg-tag">Generalist</span>
+                    <span class="pg-tag">Interactive</span>
+                  </div>
+                  <div class="pg-contrib">
+                    <p class="pg-contrib-label">Contribution</p>
+                    <p class="pg-contrib-text">Lead environment artist on the project's most complex interactive
+                      environment. Responsible for a majority of the prop and environment modeling and texturing work,
+                      in-engine setup of ~80% of all environments, all prop rigs, and several tooling efforts.</p>
+                  </div>
+                  <button class="pg-close">Collapse &times;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end .proj-grid -->
+
       </div>
     </section>
+
 
     <!-- Career Timeline -->
     <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="timeline">
@@ -1622,13 +1668,13 @@
             <!-- Role: Character Technical Artist -->
             <div class="flex flex-col md:flex-row md:gap-20">
               <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
-                <span class="text-sm font-medium text-gray-500 block">Nov 2022 — Jan 2026</span>
+                <span class="text-sm font-medium text-gray-500 block">Nov 2022 &ndash; Jan 2026</span>
               </div>
               <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-10 relative">
                 <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">Character Technical
                   Artist</h4>
                 <p class="text-gray-400 text-sm leading-relaxed">Led technical art across three major avatar platform
-                  launches — driving deformation systems, clothing pipeline development, vendor tooling, and
+                  launches &mdash; driving deformation systems, clothing pipeline development, vendor tooling, and
                   cross-functional production strategy for avatar clothing used by millions across VR and social
                   platforms.</p>
               </div>
@@ -1636,13 +1682,14 @@
             <!-- Role: 3D Artist (Contingent) — last in group -->
             <div class="flex flex-col md:flex-row md:gap-20">
               <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
-                <span class="text-sm font-medium text-gray-500 block">Feb 2021 — Nov 2022</span>
+                <span class="text-sm font-medium text-gray-500 block">Feb 2021 &ndash; Nov 2022</span>
               </div>
               <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-20 relative">
                 <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">3D Artist
                   (Contingent)</h4>
                 <p class="text-gray-400 text-sm leading-relaxed">Contributed to the foundational avatar system as a
-                  generalist technical artist — developing production tooling, sculpting facial features, and bridging
+                  generalist technical artist &mdash; developing production tooling, sculpting facial features, and
+                  bridging
                   art and engineering across hair shading and clothing system launches.</p>
               </div>
             </div>
@@ -1662,7 +1709,7 @@
             <!-- Role: CG Artist, VR Production -->
             <div class="flex flex-col md:flex-row md:gap-20">
               <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
-                <span class="text-sm font-medium text-gray-500 block">2020 — 2021</span>
+                <span class="text-sm font-medium text-gray-500 block">2020 &ndash; 2021</span>
               </div>
               <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-10 relative">
                 <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">CG Artist, VR
@@ -1675,7 +1722,7 @@
             <!-- Role: CG Generalist / Rigging Intern — last in group -->
             <div class="flex flex-col md:flex-row md:gap-20">
               <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
-                <span class="text-sm font-medium text-gray-500 block">2019 — 2020</span>
+                <span class="text-sm font-medium text-gray-500 block">2019 &ndash; 2020</span>
               </div>
               <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-20 relative">
                 <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">CG Generalist /
@@ -1701,14 +1748,15 @@
             <!-- Role: Instructor of Record — last entry, line terminates here -->
             <div class="flex flex-col md:flex-row md:gap-20">
               <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
-                <span class="text-sm font-medium text-gray-500 block">2017 — 2019</span>
+                <span class="text-sm font-medium text-gray-500 block">2017 &ndash; 2019</span>
               </div>
               <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-4 relative">
                 <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">Instructor of Record
                 </h4>
                 <p class="text-gray-400 text-sm leading-relaxed">Developed and taught undergraduate CG production
                   courses
-                  — including the university's first online Maya course — training students across the full production
+                  &mdash; including the university's first online Maya course &mdash; training students across the full
+                  production
                   pipeline.</p>
               </div>
             </div>
@@ -1801,7 +1849,7 @@
   <footer class="py-20 px-6 border-t border-white/5 bg-brand-dark">
     <div
       class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-[0.3em] text-gray-600">
-      <p>© 2026 Nathan Lindig. All rights reserved.</p>
+      <p>&copy; 2026 Nathan Lindig. All rights reserved.</p>
       <div class="flex items-center space-x-2">
         <div class="w-2 h-2 bg-brand-gold rounded-full"></div>
         <p>Character Technical Artist</p>
@@ -1863,7 +1911,7 @@
   </script>
 
   <script>
-    // ── Hamburger toggle ──────────────────────────────────────────────────────
+    // -- Hamburger toggle ------------------------------------------------------
     (function () {
       var btn = document.getElementById('nav-hamburger');
       var overlay = document.getElementById('mobile-nav-overlay');
@@ -1876,7 +1924,7 @@
       });
     })();
 
-    // ── Nav active state — scroll-based (reliable for variable-height sections) ─
+    // -- Nav active state — scroll-based (reliable for variable-height sections) -
     (function () {
       var allNavLinks = document.querySelectorAll('nav a[href^="#"], .mobile-nav-overlay a[href^="#"]');
       var nav = document.querySelector('nav');
@@ -1900,7 +1948,7 @@
       updateActive();
     })();
 
-    // ── Scroll entrance animations ────────────────────────────────────────────
+    // -- Scroll entrance animations --------------------------------------------
     (function () {
       // threshold:0 fires the instant ANY pixel enters the viewport — most reliable.
       // rootMargin bottom offset prevents triggering while element just barely peeks in.
@@ -2094,7 +2142,7 @@
         A.fill(1); B.fill(0);
         for (let s = 0; s < 520; s++) {
           const cx = Math.floor(Math.random() * simW), cy = Math.floor(Math.random() * simH);
-          const r = 3 + Math.floor(Math.random() * 5); // radius 3–7
+          const r = 3 + Math.floor(Math.random() * 5); // radius 3-7
           for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
             if (dx * dx + dy * dy <= r * r) {
               const x = ((cx + dx) + simW) % simW, y = ((cy + dy) + simH) % simH;
@@ -2350,6 +2398,53 @@
       });
 
       updateCarousel();
+    })();
+
+    // ===================== DESKTOP PROJECT GRID =====================
+    (function () {
+      var grid = document.getElementById('proj-grid');
+      if (!grid) return;
+
+      function resetPair(pair) {
+        pair.querySelectorAll('.pg-card').forEach(function (c) {
+          c.classList.remove('pg-active', 'pg-collapsed');
+        });
+      }
+
+      // Delegate clicks on the grid
+      grid.addEventListener('click', function (e) {
+        // Collapse button
+        var closeBtn = e.target.closest('.pg-close');
+        if (closeBtn) {
+          e.stopPropagation();
+          var pair = closeBtn.closest('.proj-pair');
+          if (pair) resetPair(pair);
+          return;
+        }
+
+        // Card click â€” only activate if not already active
+        var card = e.target.closest('.pg-card');
+        if (!card) return;
+        if (card.classList.contains('pg-active')) return;
+
+        var pair = card.closest('.proj-pair');
+        if (!pair) return;
+
+        // Reset any other active pair in the whole grid first
+        grid.querySelectorAll('.proj-pair').forEach(function (p) {
+          if (p !== pair) resetPair(p);
+        });
+
+        // Expand clicked card, collapse all others in the row
+        card.classList.add('pg-active');
+        card.classList.remove('pg-collapsed');
+        Array.from(pair.querySelectorAll('.pg-card')).forEach(function (c) {
+          if (c !== card) {
+            c.classList.add('pg-collapsed');
+            c.classList.remove('pg-active');
+          }
+        });
+      });
     })();
   </script>
 
