@@ -1,0 +1,2358 @@
+﻿<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Nathan Lindig | Character Technical Artist</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-dark': '#050505',
+            'brand-navy': '#0a0a0c',
+            'brand-gold': '#d4af37',
+            'brand-accent': '#3b82f6',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <style data-purpose="custom-styling">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap');
+
+    body {
+      background-color: #050505;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .hero-title {
+      letter-spacing: -0.05em;
+      line-height: 0.85;
+    }
+
+    /* ============================================================
+       PROJECT FOCUS CAROUSEL
+    ============================================================ */
+    .proj-carousel-wrap {
+      position: relative;
+    }
+
+    .proj-carousel-wrap::before,
+    .proj-carousel-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 6vw;
+      max-width: 60px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .proj-carousel-wrap::before {
+      left: 0;
+      background: linear-gradient(to right, #0a0a0c, transparent);
+    }
+
+    .proj-carousel-wrap::after {
+      right: 0;
+      background: linear-gradient(to left, #0a0a0c, transparent);
+    }
+
+    .proj-carousel {
+      overflow: hidden;
+      padding: 32px 0 40px;
+    }
+
+    .proj-track {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+
+    .proj-card {
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      overflow: hidden;
+      padding: 1.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: #0d0d10;
+      transition:
+        width 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity 0.28s ease,
+        transform 0.28s ease,
+        border-color 0.2s ease;
+      will-change: transform, opacity;
+    }
+
+    .proj-card[data-state="active"] {
+      opacity: 1;
+      transform: scale(1);
+      border-color: rgba(212, 175, 55, 0.25);
+    }
+
+    .proj-card[data-state="adj"] {
+      opacity: 0.6;
+      transform: scale(0.98);
+      transform-origin: top center;
+      cursor: pointer;
+    }
+
+    .proj-card[data-state="adj"]:hover {
+      opacity: 0.82;
+    }
+
+    .proj-card[data-state="far"] {
+      width: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      border-left-width: 0 !important;
+      border-right-width: 0 !important;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Badge + date row */
+    .proj-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      min-height: 18px;
+    }
+
+    .proj-category {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #d4af37;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      padding: 3px 8px;
+      white-space: nowrap;
+    }
+
+    .proj-date-chip {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.42);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Title */
+    .proj-title {
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 8px;
+      font-size: 0.875rem;
+    }
+
+    .proj-card[data-state="active"] .proj-title {
+      font-size: 1.6rem;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    /* Teaser */
+    .proj-teaser {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .proj-card[data-state="active"] .proj-teaser {
+      -webkit-line-clamp: unset;
+      overflow: visible;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+    }
+
+    /* Body — grid-expands when active */
+    .proj-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.28s ease;
+    }
+
+    .proj-body-inner {
+      overflow: hidden;
+    }
+
+    .proj-card[data-state="active"] .proj-body {
+      grid-template-rows: 1fr;
+    }
+
+    /* Tags */
+    .proj-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 14px;
+      margin-bottom: 14px;
+    }
+
+    .proj-tag {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.38);
+      padding: 2px 8px;
+    }
+
+    /* Contribution */
+    .proj-contrib {
+      border-left: 2px solid rgba(212, 175, 55, 0.4);
+      padding-left: 12px;
+      margin-bottom: 14px;
+    }
+
+    .proj-contrib-label {
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(212, 175, 55, 0.75);
+      margin-bottom: 6px;
+    }
+
+    .proj-contrib-text {
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.78);
+      line-height: 1.65;
+    }
+
+    /* Details toggle */
+    .proj-details-btn {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #d4af37;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 0;
+    }
+
+    .proj-details-btn:hover {
+      color: #e8c84a;
+    }
+
+    .proj-details {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.22s ease;
+    }
+
+    .proj-details-inner {
+      overflow: hidden;
+    }
+
+    .proj-card.details-open .proj-details {
+      grid-template-rows: 1fr;
+    }
+
+    .proj-card.details-open .proj-details-inner {
+      padding-top: 14px;
+      margin-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    /* Nav controls */
+    .proj-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .proj-nav-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.6);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .proj-nav-btn:hover {
+      border-color: rgba(212, 175, 55, 0.5);
+      color: #d4af37;
+    }
+
+    .proj-counter {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: rgba(255, 255, 255, 0.25);
+      min-width: 48px;
+      text-align: center;
+    }
+
+    .nav-scrolled {
+      background: rgba(5, 5, 5, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    /* RD background canvas — fixed behind everything */
+    #rd-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.10;
+    }
+
+    /* Sections that reveal the RD background — transparent */
+    #hero,
+    #skills,
+    #timeline,
+    #contact {
+      position: relative;
+      z-index: 1;
+      background: transparent;
+    }
+
+    /* Hero name fade — left opaque, right transparent */
+    .hero-name-fade {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 70%;
+      height: 100%;
+      background: linear-gradient(to right, #050505 40%, transparent 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Sections that hide the RD background — solid fill */
+    #about,
+    #experience,
+    #earlier-work {
+      position: relative;
+      z-index: 1;
+      background: #050505;
+    }
+
+    /* Section transition shadows — top and bottom edge shading */
+    .section-shadow-top::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, #050505, transparent);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .section-shadow-bottom::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to top, #050505, transparent);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Navy sections */
+    #experience {
+      background: #0a0a0c;
+    }
+
+    #earlier-work {
+      background: #0a0a0c;
+    }
+
+    /* Make nav sit above everything */
+    nav {
+      z-index: 50;
+    }
+
+    /* Footer solid */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: #050505;
+    }
+
+    /* Skill tag tiers */
+    .skill-primary {
+      background: rgba(255, 255, 255, 0.07);
+    }
+
+    #skills .rounded-full {
+      font-weight: 500;
+    }
+
+    /* Reel grid */
+    .reel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .reel-tile {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .reel-tile.is-active {
+      grid-column: 1 / -1;
+      order: -1;
+      cursor: default;
+    }
+
+    .reel-thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #0d0d10;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .reel-tile.is-active .reel-thumb {
+      display: none;
+    }
+
+    .reel-embed {
+      display: none;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+
+    .reel-tile.is-active .reel-embed {
+      display: block;
+    }
+
+    .reel-embed iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .reel-label {
+      margin-top: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .reel-tile.is-active .reel-label {
+      color: #d4af37;
+    }
+
+    .reel-play-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(13, 13, 16, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      transition: background 0.25s, border-color 0.25s;
+    }
+
+    .reel-thumb:hover .reel-play-icon {
+      background: #d4af37;
+      border-color: #d4af37;
+    }
+
+    .reel-thumb:hover .reel-play-icon svg {
+      color: #050505;
+    }
+
+    .reel-title-text {
+      font-size: 1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    @media (max-width: 640px) {
+      .reel-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .reel-tile.is-active {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* ── Nav accent line on section entry ──────────────────────────────────── */
+    nav {
+      transition: border-color 0.5s ease;
+    }
+
+    nav.nav-in-content {
+      border-bottom-color: rgba(212, 175, 55, 0.35);
+    }
+
+    nav a.nav-active {
+      color: #d4af37;
+    }
+
+    /* ── Hamburger button ───────────────────────────────────────────────────── */
+    .nav-hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .nav-hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+      transform-origin: center;
+    }
+
+    .nav-hamburger.is-open span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .nav-hamburger.is-open span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    .nav-hamburger.is-open span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* ── Mobile nav overlay ─────────────────────────────────────────────────── */
+    .mobile-nav-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 48;
+      background: rgba(5, 5, 5, 0.97);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .mobile-nav-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-nav-overlay a {
+      font-size: clamp(1.75rem, 8vw, 3rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      color: rgba(255, 255, 255, 0.45);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .mobile-nav-overlay a:hover,
+    .mobile-nav-overlay a.nav-active {
+      color: #d4af37;
+    }
+
+    /* ── Scroll entrance — fade-up ──────────────────────────────────────────── */
+    .will-enter {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .will-enter.entered {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Scroll entrance — clip-path title wipe (rises from below) ───────────── */
+    .reveal-title {
+      clip-path: inset(100% 0 0 0);
+      /* clips from the TOP — element is hidden */
+      transform: translateY(10px);
+      transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: clip-path, transform;
+    }
+
+    .reveal-title.entered {
+      clip-path: inset(0 0 0 0);
+      /* fully visible */
+      transform: translateY(0);
+    }
+
+    /* ── Uniform skill tags ─────────────────────────────────────────────────── */
+    #skills .rounded-full {
+      background: rgba(255, 255, 255, 0.06) !important;
+      border-color: rgba(255, 255, 255, 0.13) !important;
+      color: #ffffff !important;
+      font-weight: 500 !important;
+      transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+      cursor: default;
+    }
+
+    #skills .rounded-full:hover {
+      background: rgba(212, 175, 55, 0.09) !important;
+      border-color: rgba(212, 175, 55, 0.42) !important;
+      color: #ffffff !important;
+    }
+
+    /* ── Career Timeline overrides ──────────────────────────────────────────── */
+    #timeline span.font-black {
+      font-size: 1.5rem !important;
+      /* company names: text-xl → text-2xl */
+    }
+
+    #timeline .shrink-0 span {
+      color: rgba(212, 175, 55, 0.9) !important;
+      /* dates → gold */
+    }
+
+    #timeline p.text-gray-400 {
+      color: rgba(255, 255, 255, 0.72) !important;
+      /* descriptions → noticeably brighter */
+    }
+  </style>
+</head>
+
+<body class="bg-brand-dark text-white selection:bg-brand-gold selection:text-brand-dark antialiased">
+
+  <!-- RD Background Canvas -->
+  <canvas id="rd-canvas"></canvas>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-brand-dark/80 backdrop-blur-md"
+    data-purpose="main-navigation">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="text-2xl font-black tracking-tighter">NL<span class="text-brand-gold">.</span></div>
+      <div class="hidden md:flex space-x-10 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+        <a class="hover:text-white transition-colors" href="#about">About</a>
+        <a class="hover:text-white transition-colors" href="#skills">Skills</a>
+        <a class="hover:text-white transition-colors" href="#experience">Experience</a>
+        <a class="hover:text-white transition-colors" href="#timeline">Timeline</a>
+        <a class="hover:text-white transition-colors" href="#earlier-work">Earlier Work</a>
+        <a class="hover:text-white transition-colors" href="#contact">Contact</a>
+      </div>
+      <!-- Mobile hamburger -->
+      <button aria-label="Open menu" class="md:hidden nav-hamburger" id="nav-hamburger">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile nav overlay -->
+  <div class="mobile-nav-overlay" id="mobile-nav-overlay">
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#earlier-work">Earlier Work</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <main>
+
+    <!-- Hero -->
+    <header class="min-h-screen flex flex-col justify-center px-6 pt-20 relative overflow-hidden section-shadow-bottom"
+      id="hero">
+      <!-- Left-to-right fade behind name -->
+      <div class="hero-name-fade"></div>
+      <div class="max-w-7xl mx-auto w-full relative z-10">
+        <h1 class="hero-title text-7xl md:text-[11rem] font-black uppercase mb-6">
+          NATHAN<br />LINDIG<span class="text-brand-gold">.</span>
+        </h1>
+        <p class="text-brand-gold text-lg md:text-2xl font-bold tracking-[0.3em] uppercase mb-12">
+          Character Technical Artist
+        </p>
+        <div class="max-w-2xl">
+          <p class="text-2xl md:text-3xl text-gray-200 font-light leading-tight">
+            Artist instincts. Engineer thinking.<br />
+            <span class="text-white font-medium">Fluent across the full CG pipeline.</span>
+          </p>
+        </div>
+      </div>
+      <div
+        class="absolute bottom-0 right-0 opacity-[0.03] select-none pointer-events-none translate-y-1/4 translate-x-1/4">
+        <span class="text-[30rem] font-black leading-none uppercase">TA</span>
+      </div>
+      <!-- Scroll indicator -->
+      <div
+        class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-500 scroll-chevron"
+        aria-hidden="true">
+        <span class="text-[9px] font-bold uppercase tracking-[0.3em]">Scroll</span>
+        <svg class="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+    </header>
+
+    <!-- About -->
+    <section class="py-40 px-6 border-y border-white/5 section-shadow-top section-shadow-bottom" id="about">
+      <div class="max-w-7xl mx-auto">
+        <div class="grid md:grid-cols-12 gap-8 items-start">
+          <!-- Left column: decorative/typographic -->
+          <div class="md:col-span-4 flex flex-col gap-6 md:sticky md:top-28 md:items-end md:text-right">
+            <h2 class="text-[10px] font-black tracking-[0.5em] uppercase text-brand-gold">About</h2>
+            <div class="hidden md:block w-px h-32 bg-brand-gold/20"></div>
+            <div class="hidden md:flex flex-col gap-3 text-[10px] font-bold uppercase tracking-[0.25em] text-gray-600">
+              <span>Character Technical Artist</span>
+              <span class="text-brand-gold/60">—</span>
+              <span>VR · Social · Real-time</span>
+              <span class="text-brand-gold/60">—</span>
+              <span>Pipeline · Tools · Art</span>
+            </div>
+          </div>
+          <!-- Right column: body text, restrained sizing -->
+          <div class="md:col-span-8 space-y-6">
+            <p class="text-lg md:text-xl leading-relaxed font-light text-gray-200">
+              I'm a Character Technical Artist wired to see the world through the eyes of an <span
+                class="text-brand-gold font-normal">artist</span> — but trained to think through problems like an <span
+                class="text-brand-gold font-normal">engineer</span>. Where an artist focuses on the result they want to
+              create, I'm thinking about how to approach the problem and how to make the process better, easier, faster,
+              and more enjoyable for everyone involved.
+            </p>
+            <p class="text-base text-gray-400 leading-relaxed">
+              My background spans every aspect of CG production — modeling, texturing, rigging, shading, pipeline
+              development, and tooling — across VR, social platforms, and real-time character systems. That breadth
+              gives me a unique ability to anticipate how a decision in one part of a pipeline ripples downstream, and
+              to design solutions with that full context in mind.
+            </p>
+            <p class="text-base text-gray-400 leading-relaxed">
+              I don't settle for the tools in front of me. I'm always looking for new techniques and better approaches —
+              not just to grow my own capabilities, but to expand what's possible for the teams I serve. That same
+              instinct extends to the people I work with: I can sit with an engineer and explain how an artist sees a
+              problem, and I can sit with an artist and help them understand why constraints exist. Translation between
+              disciplines — in both directions — is something I do naturally, and it's one of the things I value most
+              about the work.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="skills">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-6xl font-black uppercase tracking-tighter mb-24">Skills</h2>
+
+        <!-- Row 1: Technical Specialties — full width -->
+        <div class="mb-16">
+          <h3
+            class="text-xs font-black uppercase tracking-[0.3em] text-brand-gold mb-10 border-b border-brand-gold/20 pb-4">
+            Technical Specialties</h3>
+          <div class="flex flex-wrap gap-3">
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Deformation
+              Systems</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Skin
+              Weighting</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Mesh
+              Correspondence</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Python
+              · Maya API</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Tool
+              Development</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Pipeline
+              Development</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Clothing
+              Pipeline</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Rigging</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Shader
+              Development</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Sculpting</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Auto-Fit</span>
+            <span
+              class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Auto-Skinning</span>
+            <span
+              class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">LOD
+              Systems</span>
+            <span
+              class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">QA
+              &amp; Asset Validation</span>
+          </div>
+        </div>
+
+        <!-- Row 2: Three equal columns -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+
+          <div>
+            <h3
+              class="text-xs font-black uppercase tracking-[0.3em] text-brand-gold mb-10 border-b border-brand-gold/20 pb-4">
+              Software &amp; Tools</h3>
+            <div class="flex flex-wrap gap-3">
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Maya</span>
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">ZBrush</span>
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Substance
+                Painter</span>
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Unity</span>
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Houdini</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Perforce</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Git</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Adobe
+                Creative Suite</span>
+            </div>
+          </div>
+
+          <div>
+            <h3
+              class="text-xs font-black uppercase tracking-[0.3em] text-brand-gold mb-10 border-b border-brand-gold/20 pb-4">
+              Collaboration &amp; Leadership</h3>
+            <div class="flex flex-wrap gap-3">
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Cross-Functional
+                Communication</span>
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Production
+                Leadership</span>
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Prototyping
+                &amp; R&amp;D Strategy</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Vendor
+                Management &amp; Onboarding</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Technical
+                Documentation</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Artist
+                Direction</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Engineering
+                Feedback &amp; Requirements</span>
+            </div>
+          </div>
+
+          <div>
+            <h3
+              class="text-xs font-black uppercase tracking-[0.3em] text-brand-gold mb-10 border-b border-brand-gold/20 pb-4">
+              Domain Knowledge</h3>
+            <div class="flex flex-wrap gap-3">
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Realtime
+                Character Systems</span>
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">Avatar
+                Systems</span>
+              <span
+                class="skill-primary px-5 py-2 bg-white/8 border border-white/30 rounded-full text-xs font-bold uppercase tracking-wider text-white">VR
+                Production</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Mix
+                &amp; Match Clothing Systems</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Procedural
+                Pipeline Design</span>
+              <span
+                class="px-5 py-2 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-wider text-gray-400">Large-Scale
+                Asset Production</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="experience">
+      <div class="max-w-7xl mx-auto">
+
+        <div class="flex items-baseline justify-between mb-16 border-b border-white/10 pb-6">
+          <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter italic">Projects <span
+              class="text-brand-gold font-normal">&amp;</span> Contributions</h2>
+        </div>
+
+        <!-- Focus Carousel -->
+        <div class="proj-carousel-wrap">
+          <div class="proj-carousel">
+            <div class="proj-track" id="proj-track">
+
+              <!-- Card 0: Body Types & Clothing Update -->
+              <div class="proj-card" data-index="0">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">July 30, 2025 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Body Types &amp; Clothing Update</h3>
+                <p class="proj-teaser">Introduced customizable body type sliders and new clothing options across Meta's
+                  five platforms — built on a deformation transfer framework and proxy mesh system.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">Global Launch</span>
+                      <span class="proj-tag">Deformation Systems</span>
+                      <span class="proj-tag">Platform</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Co-developed the mesh correspondence deformation transfer framework
+                        and designed a system of 11 proxy meshes enabling clothing to fit correctly across all new body
+                        type variations. Led bug triage for clothing and auto-fit issues during rollout, ensuring a
+                        clean launch across all five platforms.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Designed and
+                            built a system of 11 proxy meshes derived from four shape parameters (Relaxed, Flat Bum,
+                            Flat Bust, Uni-Leg) to address clothing fit artifacts — encoding how clothing fits across
+                            body volumes rather than following raw body surface geometry.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
+                            procedural proxy generation system using a deformation stack that automatically propagated
+                            blendshape targets to proxy meshes, with a headless Maya batch process for scalable
+                            execution.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led the skin
+                            weight application of the deformation transfer framework, restructuring the robust skin
+                            weight transfer method to work within the framework's four-phase architecture.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Drove
+                            prototyping of the Rigidify Attachments and Absorb Vector Offset correspondence operations
+                            in Python/Maya.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
+                            comprehensive mesh map generator and visualizer including curvature and correspondence-based
+                            quality maps.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led bug triage
+                            for clothing and auto-fit issues during the July 30, 2025 rollout across all five platforms.
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 1: Style 2 Avatar -->
+              <div class="proj-card" data-index="1">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">Oct 1, 2024 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Style 2 Avatar</h3>
+                <p class="proj-teaser">A complete overhaul of Meta's avatar system introducing an entirely new catalog
+                  of clothing and accessories across Horizon Worlds, Horizon Home, and Workrooms.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">Global Launch</span>
+                      <span class="proj-tag">Avatar Systems</span>
+                      <span class="proj-tag">Platform</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Involved from the earliest prototyping stage through public launch —
+                        coordinating cross-functional feasibility evaluations, authoring technical requirements,
+                        directing skin weight production for ~80% of the catalog, leading mix and match QA across
+                        hundreds of asset combinations, and developing the initial procedural skin weight transfer
+                        system integrated into Meta's build pipeline.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Coordinated a
+                            cross-functional prototyping effort to evaluate production feasibility of Style 2 North Star
+                            imagery, resulting in a formal leadership green light establishing the execution strategy
+                            for an entirely new clothing catalog.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Authored
+                            technical requirements documentation for all Style 2 clothing assets; directed artists and
+                            art directors in developing artistic and stylistic guidance.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Provided
+                            feedback to Engineers and PMs on proprietary Auto-LOD, Auto-Fit, and garment layering
+                            systems — bridging engineering implementation and artistic intent.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led the
+                            redesign of mix and match strategy and technical guidance for Style 2, extending rules to
+                            account for new avatar body characteristics and deformation edge cases.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Directed a team
+                            of ~7 artists over ~1 month to manually produce skin weight data for ~80% of the Style 2
+                            catalog prior to launch.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed the
+                            initial procedural skin weight transfer system integrated into Meta's proprietary asset
+                            build pipeline.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led QA for mix
+                            and match compatibility across hundreds of clothing combinations, directly modifying 30+
+                            assets and advising development of a geometry culling system.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Horizon Worlds Full-Body Avatar Legs -->
+              <div class="proj-card" data-index="2">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">Sept 15, 2023 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Horizon Worlds Full-Body Avatar Legs</h3>
+                <p class="proj-teaser">Meta's first full-body avatar system in VR, introducing animated legs across
+                  Horizon Worlds — requiring a clothing readiness effort across 100+ assets to ship.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">Global Launch</span>
+                      <span class="proj-tag">VR</span>
+                      <span class="proj-tag">Clothing Pipeline</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Led the critical launch-blocking clothing readiness effort — auditing
+                        and updating 100+ assets across all five clothing categories, conducting deformation QA across
+                        animations and LODs, and redesigning the skirt skin weight transfer pipeline from a manual
+                        process into a batch-processable procedural system.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Audited and
+                            updated 100+ clothing assets across all five categories (tops, bottoms, footwear,
+                            one-pieces, outfits) for deformation compatibility with the new full-body rig.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Conducted QA
+                            art reviews across animations, viewing angles, and LODs to ensure no asset would place users
+                            in a visually compromised position under any in-game condition.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Redesigned the
+                            skirt skin weight transfer pipeline from a manual per-asset process into a batch-processable
+                            procedural system, eliminating quality inconsistency risk across the catalog.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Performed bug
+                            fixing on clothing assets that failed quality checks, ensuring all assets met Meta's
+                            shipping quality standard in time for launch.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3: Avatar Hair System Overhaul -->
+              <div class="proj-card" data-index="3">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">Apr 27, 2023 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Avatar Hair System Overhaul</h3>
+                <p class="proj-teaser">Full catalog migration from stylized normal-transfer rendering to realistic
+                  anisotropic shading, rolling out across all Meta avatar surfaces.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">Global Launch</span>
+                      <span class="proj-tag">Rendering</span>
+                      <span class="proj-tag">Platform</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Served as the primary technical-artistic bridge between art
+                        leadership and engineering — defining the new texture map format for anisotropic shading,
+                        developing Substance Painter tooling for flow map authoring and seam visualization, and
+                        contributing to complementary shading solutions for coily and curly hair types.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Served as
+                            primary technical-artistic bridge between art leadership and engineering for the full
+                            catalog hair system overhaul.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Defined a new
+                            texture map format for anisotropic shading — repurposing the ORM map (Cavity, Roughness,
+                            Strand Detail + grayscale flow map in alpha) — keeping texture count the same while adding
+                            directional shading data.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
+                            Substance Painter filter layer converting RGB flow maps to grayscale in real time, enabling
+                            artists to visualize and reposition the wraparound seam during authoring.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Identified that
+                            anisotropic shading was less effective for coily/curly hair and contributed to the
+                            development of complementary rim light approximation shaders.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Documented
+                            ideal parameter ranges and value combinations for specific hair styles as a foundational
+                            reference for artists applying the new system across the full catalog.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 4: Avatars Store Mix & Match -->
+              <div class="proj-card" data-index="4">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">Jun 2022 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Avatars Store &mdash; Mix &amp; Match</h3>
+                <p class="proj-teaser">Launched Meta's mix and match clothing system — enabling users to freely combine
+                  separate tops, bottoms, and footwear for the first time.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">Global Launch</span>
+                      <span class="proj-tag">Clothing Pipeline</span>
+                      <span class="proj-tag">Platform</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Contributed to migrating a significant portion of the outfit catalog
+                        from combined outfits to mix and match separates, and helped validate and iterate on the guide
+                        mesh system governing how clothing categories layered together — establishing early ownership of
+                        a role that expanded significantly in subsequent years.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Contributed to
+                            migrating a significant portion of the existing outfit catalog from fully combined outfits
+                            into mix and match separates (tops, bottoms, footwear) compatible with the new system.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Validated and
+                            iterated on the mix and match guide mesh system based on cross-team artist feedback,
+                            establishing early ownership of guides that would expand significantly in the full-time
+                            role.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 5: Meta Avatar Rollout to Instagram -->
+              <div class="proj-card" data-index="5">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">Jan 31, 2022 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Meta Avatar Rollout to Instagram</h3>
+                <p class="proj-teaser">Meta's first expansion of avatars to Instagram Stories and DMs, alongside a
+                  comprehensive overhaul of avatar facial feature shapes.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">Global Launch</span>
+                      <span class="proj-tag">Avatar Systems</span>
+                      <span class="proj-tag">Platform</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Personally sculpted 40+ facial feature shapes across face, nose,
+                        mouth, and eye categories — going through multiple rounds of art leadership review to meet the
+                        quality and representation bar required for Meta's first avatar expansion to Instagram.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Personally
+                            sculpted 40+ facial feature shapes (12 face shapes, 12 nose shapes including addition of
+                            nostrils, 5 mouth shapes, 12+ eye shapes) through multiple rounds of art leadership review.
+                          </li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Collaborated
+                            with another TA on a rig-driven eye shape system; the rig procedurally generated animation
+                            shapes (open/close) for each eye variant, ensuring correct performance across all options.
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 6: Horizon Worlds Launch -->
+              <div class="proj-card" data-index="6">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">Dec 9, 2021 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Horizon Worlds Launch</h3>
+                <p class="proj-teaser">The public launch of Horizon Worlds and the new Oculus Avatar system, supported
+                  by pipeline tooling for hair, facial hair, and clothing assets.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">Global Launch</span>
+                      <span class="proj-tag">VR</span>
+                      <span class="proj-tag">Platform</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Developed three Maya GUI tools adopted as production pipeline
+                        standards: a sideburn conforming tool for seamless hair and facial hair connections, a normal
+                        transfer tool for stylized hair rendering, and a material setup tool automating texture node
+                        wiring across asset types.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
+                            sideburn conforming tool automating the steps needed to ensure seamless hair and facial hair
+                            connections across all combinations.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
+                            normal transfer tool allowing artists to blend between original and transferred normal
+                            values to control the degree of stylization.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
+                            material setup tool that scanned scene meshes to detect asset type and automatically handled
+                            material creation and texture node wiring.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 7: Baba Yaga -->
+              <div class="proj-card" data-index="7">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">2021 &middot; Baobab Studios</span>
+                </div>
+                <h3 class="proj-title">Baba Yaga</h3>
+                <p class="proj-teaser">An immersive interactive VR animated experience — contributed across
+                  environments, rigging, shading, tooling, and in-engine integration.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">VR</span>
+                      <span class="proj-tag">Film</span>
+                      <span class="proj-tag">Interactive</span>
+                      <span class="proj-tag">Environments</span>
+                      <span class="proj-tag">Rigging</span>
+                      <span class="proj-tag">Shading</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Contributed across the full production lifecycle as a generalist —
+                        serving as lead environment artist for one of the project's most complex interactive
+                        environments, building character rigs for Baobab's proprietary deformation system, developing a
+                        custom multi-lighting-scenario blend shader, and handling in-engine setup for roughly 80% of the
+                        project's environments.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Created
+                            environment models and textures for several sections from scratch; served as lead
+                            environment artist for one of the most complex interactive environments produced by the
+                            studio.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Responsible for
+                            in-engine setup of ~80% of Baba Yaga's environments — importing assets, building prefabs,
+                            composing scenes, and tuning shader parameters for VR headset viewing.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Built
+                            simplified in-engine character rigs for Baobab's proprietary two-tier deformation system,
+                            enabling high-fidelity Maya performance to be approximated in Unity within VR budgets.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed a
+                            custom shader blending between multiple baked lighting scenario texture maps, enabling
+                            dynamic lighting changes without real-time light sources.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Formalized
+                            scattered export scripts into a structured Maya GUI tool, simplifying the proprietary
+                            rigging data export process for the team.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Created all
+                            major interactive and dynamic props for the project in Unity.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 8: Vendor Tooling -->
+              <div class="proj-card" data-index="8">
+                <div class="proj-badge-row">
+                  <span class="proj-category">Shipped</span>
+                  <span class="proj-date-chip">Late 2025&ndash;Jan 2026 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Vendor Tooling &mdash; External Pipeline Toolset</h3>
+                <p class="proj-teaser">A Maya-based toolset exposing Meta's internal clothing pipeline to external
+                  vendors — enabling 15–30 artists across three companies to produce assets within Meta's pipeline.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">Shipped</span>
+                      <span class="proj-tag">Tools</span>
+                      <span class="proj-tag">Pipeline</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Led end-to-end development from requirements scoping through
+                        shipping, onboarding, and iterative updates — refactoring internal code to function without
+                        internal libraries and writing new tooling for previously manual or complex processes. Oversaw a
+                        small team of TAs and completed multiple rounds of updates based on vendor feedback.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Conducted a
+                            comprehensive evaluation of every technical requirement for clothing assets and audited what
+                            internal tooling existed, establishing the full scope of features needed in the vendor
+                            toolset.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led a small
+                            team of TAs to develop Maya-based GUI tools, restructuring existing internal code to
+                            function without internal libraries.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Wrote new
+                            tooling for features covering previously manual, complex, or confusing processes —
+                            particularly for less technical users.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Shipped tooling
+                            to vendors, provided detailed demonstrations and onboarding documentation, and completed
+                            multiple rounds of feature updates and bug fixes based on vendor feedback.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 9: Deformation Transfer Framework -->
+              <div class="proj-card" data-index="9">
+                <div class="proj-badge-row">
+                  <span class="proj-category">R&amp;D</span>
+                  <span class="proj-date-chip">Oct 2024&ndash;Jan 2026 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Deformation Transfer Framework</h3>
+                <p class="proj-teaser">A Python/Maya mesh correspondence framework serving as the foundational
+                  architecture for both auto-skinning and auto-fit systems for avatar clothing.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">R&amp;D</span>
+                      <span class="proj-tag">Deformation Systems</span>
+                      <span class="proj-tag">Pipeline</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Co-developed the framework's four-phase architecture (correspondence,
+                        operations, transfer, post-transfer refinement) and led the skin weight application layer. Drove
+                        prototyping of the Rigidify Attachments and Absorb Vector Offset operators, and built a
+                        comprehensive mesh map generator and visualizer.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Co-developed a
+                            mesh correspondence framework in Python/Maya architected around four phases: mesh
+                            correspondence, operations on correspondence data, transfer, and post-transfer refinement.
+                          </li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led the skin
+                            weight application layer, restructuring the robust skin weight transfer method to work
+                            within the new framework architecture.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Drove
+                            prototyping of the Rigidify Attachments operator (making groups of points deform as a unit —
+                            useful for hard surface details like buttons and buckles) and the Absorb Vector Offset
+                            operator (blending the destination mesh closer to the source surface for improved fit).</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Built a
+                            comprehensive mesh map generator and visualizer including Normal Divergence Curvature,
+                            Second Derivative Surface Curvature, and correspondence-based quality maps.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed
+                            heuristic combination maps compositing multiple individual maps using AND/OR operators,
+                            enabling compound quality signals for more nuanced operator control.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 10: Robust Skin Weight Transfer R&D -->
+              <div class="proj-card" data-index="10">
+                <div class="proj-badge-row">
+                  <span class="proj-category">R&amp;D</span>
+                  <span class="proj-date-chip">2023&ndash;2024 &middot; Meta</span>
+                </div>
+                <h3 class="proj-title">Robust Skin Weight Transfer &mdash; R&amp;D</h3>
+                <p class="proj-teaser">R&amp;D effort replacing world space skin weight transfer with surface-based mesh
+                  correspondence to address limitations in geometrically ambiguous regions like armpits and crotches.
+                </p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">R&amp;D</span>
+                      <span class="proj-tag">Deformation Systems</span>
+                      <span class="proj-tag">Skinning</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Led the strategy and direction for exploring robust skin weight
+                        transfer as the replacement solution. Guided a collaborative effort that produced a working
+                        Python/Maya implementation integrated into Meta's internal skin weight transfer tooling — used
+                        by artists prior to launch and forming the basis of the longer-term build pipeline integration
+                        plan.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Identified
+                            structural limitations of the initial world space-based skin weight transfer system —
+                            particularly in armpits and crotch regions where world space proximity produces unreliable
+                            weight assignments.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Led the
+                            strategy and direction for exploring robust skin weight transfer as the replacement — using
+                            surface-based correspondence rather than world space proximity.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Guided a
+                            collaborative effort that produced a working Python implementation integrated into Meta's
+                            internal Maya skin weight transfer tooling, making it available to artists prior to launch.
+                          </li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Developed an
+                            action plan for integrating robust skin weight transfer into the build pipeline with
+                            sufficient detail to be executed quickly once engineering resources became available.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 11: New VR Project Pre-Production -->
+              <div class="proj-card" data-index="11">
+                <div class="proj-badge-row">
+                  <span class="proj-category">R&amp;D</span>
+                  <span class="proj-date-chip">2020&ndash;2021 &middot; Baobab Studios</span>
+                </div>
+                <h3 class="proj-title">New VR Project &mdash; Pre-Production</h3>
+                <p class="proj-teaser">Early pre-production at Baobab Studios — prototyping VR character performance,
+                  developing toon shading, and exploring large-scale traversable terrain design.</p>
+                <div class="proj-body">
+                  <div class="proj-body-inner">
+                    <div class="proj-tags">
+                      <span class="proj-tag">R&amp;D</span>
+                      <span class="proj-tag">VR</span>
+                      <span class="proj-tag">Shading</span>
+                    </div>
+                    <div class="proj-contrib">
+                      <p class="proj-contrib-label">My Contribution</p>
+                      <p class="proj-contrib-text">Prototyped character concept feasibility within VR platform
+                        constraints, personally implemented toon shading using shader graphs, and explored terrain
+                        design and asset population strategies for large-scale VR environments — contributing to both
+                        the technical and artistic direction of the project.</p>
+                    </div>
+                    <button class="proj-details-btn">Details +</button>
+                    <div class="proj-details">
+                      <div class="proj-details-inner">
+                        <ul class="space-y-3 text-sm text-gray-300">
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Prototyped the
+                            performance capabilities and technical implications of the art team's character concept
+                            work, evaluating feasibility within VR platform constraints.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Refined the art
+                            direction through evaluating its technical implications and the limitations of the release
+                            platform.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Personally
+                            implemented toon shading inspired by woven/knit/fabric materials using shader graphs within
+                            VR performance constraints.</li>
+                          <li class="flex items-start"><span
+                              class="mr-3 mt-1.5 w-1.5 h-1.5 rounded-full bg-brand-gold shrink-0"></span>Explored
+                            traversable terrain design and LOD strategies at a scale previously untackled by the studio
+                            — experimenting with level layout, asset population, and performance-conscious environment
+                            construction.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- end .proj-track -->
+          </div><!-- end .proj-carousel -->
+        </div><!-- end .proj-carousel-wrap -->
+
+        <!-- Navigation -->
+        <div class="proj-nav">
+          <button aria-label="Previous project" class="proj-nav-btn" id="proj-prev">
+            <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="16">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <span class="proj-counter" id="proj-counter">1 / 12</span>
+          <button aria-label="Next project" class="proj-nav-btn" id="proj-next">
+            <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="16">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Career Timeline -->
+    <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="timeline">
+      <div class="max-w-4xl mx-auto">
+
+        <!-- Section heading — standalone, above the timeline graphic -->
+        <h2 class="text-5xl font-black uppercase tracking-tighter mb-16 text-center">Career Timeline</h2>
+
+        <div>
+
+          <!-- META PLATFORMS group -->
+          <div>
+            <!-- Company header -->
+            <div class="flex flex-col md:flex-row md:gap-20">
+              <div class="md:w-1/3 shrink-0"></div>
+              <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pt-2 pb-5 relative">
+                <div class="hidden md:block absolute -left-[5px] top-4 w-3 h-3 rounded-full border-2"
+                  style="border-color: #050505; background: #d4af37;"></div>
+                <span class="text-xl font-black uppercase text-white">Meta Platforms</span>
+              </div>
+            </div>
+            <!-- Role: Character Technical Artist -->
+            <div class="flex flex-col md:flex-row md:gap-20">
+              <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
+                <span class="text-sm font-medium text-gray-500 block">Nov 2022 — Jan 2026</span>
+              </div>
+              <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-10 relative">
+                <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">Character Technical
+                  Artist</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">Led technical art across three major avatar platform
+                  launches — driving deformation systems, clothing pipeline development, vendor tooling, and
+                  cross-functional production strategy for avatar clothing used by millions across VR and social
+                  platforms.</p>
+              </div>
+            </div>
+            <!-- Role: 3D Artist (Contingent) — last in group -->
+            <div class="flex flex-col md:flex-row md:gap-20">
+              <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
+                <span class="text-sm font-medium text-gray-500 block">Feb 2021 — Nov 2022</span>
+              </div>
+              <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-20 relative">
+                <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">3D Artist
+                  (Contingent)</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">Contributed to the foundational avatar system as a
+                  generalist technical artist — developing production tooling, sculpting facial features, and bridging
+                  art and engineering across hair shading and clothing system launches.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- BAOBAB STUDIOS group -->
+          <div>
+            <!-- Company header -->
+            <div class="flex flex-col md:flex-row md:gap-20">
+              <div class="md:w-1/3 shrink-0"></div>
+              <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pt-2 pb-5 relative">
+                <div class="hidden md:block absolute -left-[5px] top-4 w-3 h-3 rounded-full border-2"
+                  style="border-color: #050505; background: #d4af37;"></div>
+                <span class="text-xl font-black uppercase text-white">Baobab Studios</span>
+              </div>
+            </div>
+            <!-- Role: CG Artist, VR Production -->
+            <div class="flex flex-col md:flex-row md:gap-20">
+              <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
+                <span class="text-sm font-medium text-gray-500 block">2020 — 2021</span>
+              </div>
+              <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-10 relative">
+                <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">CG Artist, VR
+                  Production</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">Served as the primary artist at the studio during final
+                  delivery of Baba Yaga and early pre-production on a new VR project, contributing across modeling,
+                  shading, and technical direction.</p>
+              </div>
+            </div>
+            <!-- Role: CG Generalist / Rigging Intern — last in group -->
+            <div class="flex flex-col md:flex-row md:gap-20">
+              <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
+                <span class="text-sm font-medium text-gray-500 block">2019 — 2020</span>
+              </div>
+              <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-20 relative">
+                <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">CG Generalist /
+                  Rigging Intern</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">Contributed as a generalist across rigging, environment
+                  art, in-engine integration, shader development, and tooling for the studio's VR animated experience
+                  Baba Yaga.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TEXAS A&M UNIVERSITY group -->
+          <div>
+            <!-- Company header -->
+            <div class="flex flex-col md:flex-row md:gap-20">
+              <div class="md:w-1/3 shrink-0"></div>
+              <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pt-2 pb-5 relative">
+                <div class="hidden md:block absolute -left-[5px] top-4 w-3 h-3 rounded-full border-2"
+                  style="border-color: #050505; background: #d4af37;"></div>
+                <span class="text-xl font-black uppercase text-white">Texas A&amp;M University</span>
+              </div>
+            </div>
+            <!-- Role: Instructor of Record — last entry, line terminates here -->
+            <div class="flex flex-col md:flex-row md:gap-20">
+              <div class="md:w-1/3 shrink-0 text-left md:text-right md:pt-1">
+                <span class="text-sm font-medium text-gray-500 block">2017 — 2019</span>
+              </div>
+              <div class="w-full md:w-2/3 border-l-2 border-brand-gold/30 pl-8 md:pl-12 pb-4 relative">
+                <h4 class="text-sm font-semibold uppercase tracking-[0.15em] text-brand-gold mb-3">Instructor of Record
+                </h4>
+                <p class="text-gray-400 text-sm leading-relaxed">Developed and taught undergraduate CG production
+                  courses
+                  — including the university's first online Maya course — training students across the full production
+                  pipeline.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Earlier Work -->
+    <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="earlier-work">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-20">
+          <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter italic mb-4">Earlier Work</h2>
+          <p class="text-gray-500 max-w-2xl font-medium">The following reels represent foundational work from earlier in
+            my career, prior to my time at Meta.</p>
+        </div>
+        <div class="reel-grid" id="reel-grid">
+
+          <div class="reel-tile" data-vimeo="499715996">
+            <div class="reel-thumb">
+              <div class="reel-play-icon">
+                <svg fill="currentColor" height="22" viewBox="0 0 24 24" width="22">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <p class="reel-title-text">Environment Artist Demo Reel</p>
+            </div>
+            <div class="reel-embed">
+              <iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                title="Environment Artist Demo Reel"></iframe>
+            </div>
+            <p class="reel-label">Environment Artist Demo Reel</p>
+          </div>
+
+          <div class="reel-tile" data-vimeo="502238823">
+            <div class="reel-thumb">
+              <div class="reel-play-icon">
+                <svg fill="currentColor" height="22" viewBox="0 0 24 24" width="22">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <p class="reel-title-text">Rigging Demo Reel</p>
+            </div>
+            <div class="reel-embed">
+              <iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                title="Rigging Demo Reel"></iframe>
+            </div>
+            <p class="reel-label">Rigging Demo Reel</p>
+          </div>
+
+          <div class="reel-tile" data-vimeo="322270127">
+            <div class="reel-thumb">
+              <div class="reel-play-icon">
+                <svg fill="currentColor" height="22" viewBox="0 0 24 24" width="22">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <p class="reel-title-text">Modeling Demo Reel</p>
+            </div>
+            <div class="reel-embed">
+              <iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen
+                title="Modeling Demo Reel"></iframe>
+            </div>
+            <p class="reel-label">Modeling Demo Reel</p>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="py-64 px-6 text-center overflow-hidden relative section-shadow-top" id="contact">
+      <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none">
+        <h2 class="text-[15vw] font-black uppercase whitespace-nowrap">LET'S WORK TOGETHER</h2>
+      </div>
+      <div class="max-w-4xl mx-auto relative z-10">
+        <h3 class="text-[10px] font-black uppercase tracking-[0.5em] text-brand-gold mb-12">Contact</h3>
+        <p class="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-12">Let's build<br />something.</p>
+        <p class="text-xl text-gray-400 font-medium max-w-lg mx-auto leading-relaxed mb-16">
+          Currently open to new opportunities.<br />Contact information available upon request.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-20 px-6 border-t border-white/5 bg-brand-dark">
+    <div
+      class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-[0.3em] text-gray-600">
+      <p>© 2026 Nathan Lindig. All rights reserved.</p>
+      <div class="flex items-center space-x-2">
+        <div class="w-2 h-2 bg-brand-gold rounded-full"></div>
+        <p>Character Technical Artist</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+      // Reel grid — expand clicked tile to full width and load Vimeo embed
+      (function () {
+        var tiles = document.querySelectorAll('.reel-tile');
+        tiles.forEach(function (tile) {
+          tile.querySelector('.reel-thumb').addEventListener('click', function () {
+            // Deactivate any currently active tile and stop its video
+            tiles.forEach(function (t) {
+              if (t.classList.contains('is-active')) {
+                t.classList.remove('is-active');
+                var iframe = t.querySelector('iframe');
+                if (iframe) iframe.src = '';
+              }
+            });
+            // Activate this tile
+            tile.classList.add('is-active');
+            var id = tile.dataset.vimeo;
+            var iframe = tile.querySelector('iframe');
+            if (iframe) {
+              iframe.src = 'https://player.vimeo.com/video/' + id
+                + '?autoplay=1&title=0&byline=0&portrait=0&color=d4af37&dnt=1';
+            }
+          });
+        });
+      })();
+  </script>
+
+  <script>
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 100) {
+        nav.classList.add('nav-scrolled');
+      } else {
+        nav.classList.remove('nav-scrolled');
+      }
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        // Close mobile overlay if open
+        var overlay = document.getElementById('mobile-nav-overlay');
+        var hamburger = document.getElementById('nav-hamburger');
+        if (overlay) { overlay.classList.remove('is-open'); }
+        if (hamburger) { hamburger.classList.remove('is-open'); hamburger.setAttribute('aria-label', 'Open menu'); }
+        document.body.style.overflow = '';
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+
+  <script>
+    // ── Hamburger toggle ──────────────────────────────────────────────────────
+    (function () {
+      var btn = document.getElementById('nav-hamburger');
+      var overlay = document.getElementById('mobile-nav-overlay');
+      if (!btn || !overlay) return;
+      btn.addEventListener('click', function () {
+        var open = overlay.classList.toggle('is-open');
+        btn.classList.toggle('is-open', open);
+        btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+    })();
+
+    // ── Nav active state — scroll-based (reliable for variable-height sections) ─
+    (function () {
+      var allNavLinks = document.querySelectorAll('nav a[href^="#"], .mobile-nav-overlay a[href^="#"]');
+      var nav = document.querySelector('nav');
+      var ids = ['hero', 'about', 'skills', 'experience', 'timeline', 'earlier-work', 'contact'];
+
+      function updateActive() {
+        // A section becomes active once its top edge crosses 38% from the top of the viewport.
+        var threshold = window.innerHeight * 0.38;
+        var current = ids[0];
+        ids.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top <= threshold) current = id;
+        });
+        allNavLinks.forEach(function (a) {
+          a.classList.toggle('nav-active', a.getAttribute('href') === '#' + current);
+        });
+        if (nav) nav.classList.toggle('nav-in-content', current !== 'hero');
+      }
+
+      window.addEventListener('scroll', updateActive, { passive: true });
+      updateActive();
+    })();
+
+    // ── Scroll entrance animations ────────────────────────────────────────────
+    (function () {
+      // threshold:0 fires the instant ANY pixel enters the viewport — most reliable.
+      // rootMargin bottom offset prevents triggering while element just barely peeks in.
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add('entered');
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+
+      // Target only the prominent h2 in each section (text-4xl/5xl/6xl avoids the tiny About label).
+      // No will-enter on parent containers — avoids the parent-opacity-blocks-child-clip-path conflict.
+      document.querySelectorAll(
+        '#skills h2, #experience h2, #timeline h2, #earlier-work h2'
+      ).forEach(function (h2) {
+        h2.classList.add('reveal-title');
+        observer.observe(h2);
+      });
+
+      // Content fade-up: observe each section's wrap directly (one element, no nesting conflict).
+      ['about', 'skills', 'experience', 'timeline', 'earlier-work', 'contact'].forEach(function (id) {
+        var wrap = document.querySelector('#' + id + ' .max-w-7xl, #' + id + ' .max-w-4xl');
+        if (!wrap) return;
+        wrap.classList.add('will-enter');
+        observer.observe(wrap);
+      });
+    })();
+  </script>
+
+  <script>
+    // ---- Reaction Diffusion Background (V2) ----
+    (function () {
+      const canvas = document.getElementById('rd-canvas');
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        resize(); // immediate — prevents CSS stretch during the debounce window
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          initBuffers();
+          seed();
+          initParticles();
+        }, 300);
+      });
+      const ctx = canvas.getContext('2d');
+
+      const ZOOM = 2, BLUR = 4, THRESH = 0.50, STEP_INTERVAL = 50;
+      const F_BASE = 0.0545, K_BASE = 0.062;
+      const GOLD_PALETTE = [
+        [165, 123, 10], [191, 154, 51], [254, 189, 20], [254, 206, 67], [254, 218, 117]
+      ];
+
+      let DW, DH, simW, simH;
+      let A, B, nA, nB, simImg, simCanvas, simCtx;
+      let voronoiRawCanvas, voronoiRawCtx, voronoiRawImg;
+      let voronoiBlurCanvas, voronoiBlurCtx;
+      let maskCanvas, maskCtx;
+      let voronoiDirty = true;
+      let smoothMaxB = 0.35; // slowly-tracked max B; prevents threshold oscillation
+      const particles = [];
+
+      // Mouse tracking on the whole page
+      let mouseX = -1, mouseY = -1, mouseActive = false;
+      document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        mouseActive = true;
+      });
+      document.addEventListener('mouseleave', () => { mouseActive = false; });
+
+      function spawnParticle() {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = 0.25 + Math.random() * 0.45;
+        const life = 400 + Math.floor(Math.random() * 500);
+        const injectsB = Math.random() < 0.5;
+        const paletteIdx = injectsB ? 2 + Math.floor(Math.random() * 3) : Math.floor(Math.random() * 3);
+        return {
+          x: Math.random() * DW, y: Math.random() * DH,
+          vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+          speed, life, maxLife: life, angle,
+          turnRate: (Math.random() - 0.5) * 0.022,
+          injectsB, color: GOLD_PALETTE[paletteIdx]
+        };
+      }
+
+      function initParticles() {
+        particles.length = 0;
+        for (let i = 0; i < 18; i++) {
+          const p = spawnParticle();
+          p.life = Math.floor(Math.random() * p.maxLife);
+          particles.push(p);
+        }
+        voronoiDirty = true; // built once on init, then frozen
+      }
+
+      function tickParticles() {
+        const tstrength = 0.005;
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.angle += p.turnRate + (Math.random() - 0.5) * 0.015;
+          p.vx = Math.cos(p.angle) * p.speed;
+          p.vy = Math.sin(p.angle) * p.speed;
+          p.x = (p.x + p.vx + DW) % DW;
+          p.y = (p.y + p.vy + DH) % DH;
+          const sx = Math.floor(p.x / DW * simW), sy = Math.floor(p.y / DH * simH), sr = 2;
+          for (let dy = -sr; dy <= sr; dy++) for (let dx = -sr; dx <= sr; dx++) {
+            if (dx * dx + dy * dy <= sr * sr) {
+              const tx = ((sx + dx) + simW) % simW, ty = ((sy + dy) + simH) % simH, ti = ty * simW + tx;
+              if (p.injectsB) { B[ti] = Math.min(1, B[ti] + tstrength); A[ti] = Math.max(0, A[ti] - tstrength * 0.4); }
+              else { A[ti] = Math.min(1, A[ti] + tstrength * 1.2); B[ti] = Math.max(0, B[ti] - tstrength * 0.8); }
+            }
+          }
+          p.life--;
+          if (p.life <= 0) { particles[i] = spawnParticle(); }
+        }
+      }
+
+      function rebuildVoronoi() {
+        if (!voronoiDirty) return;
+        voronoiDirty = false;
+        const VW = Math.floor(DW / 3), VH = Math.floor(DH / 3);
+        const vd = voronoiRawImg.data;
+        for (let py = 0; py < VH; py++) {
+          for (let px = 0; px < VW; px++) {
+            let d1 = Infinity, d2 = Infinity, c1 = GOLD_PALETTE[2], c2 = GOLD_PALETTE[2];
+            for (let i = 0; i < particles.length; i++) {
+              const p = particles[i];
+              const pdx = px * (DW / VW) - p.x, pdy = py * (DH / VH) - p.y;
+              const wdx = Math.min(Math.abs(pdx), DW - Math.abs(pdx));
+              const wdy = Math.min(Math.abs(pdy), DH - Math.abs(pdy));
+              const d = wdx * wdx + wdy * wdy;
+              if (d < d1) { d2 = d1; c2 = c1; d1 = d; c1 = p.color; }
+              else if (d < d2) { d2 = d; c2 = p.color; }
+            }
+            const r1 = Math.sqrt(d1), r2 = Math.sqrt(d2), rawT = r1 / (r1 + r2);
+            const t = Math.min(1, Math.pow(rawT * 2, 10) * 0.5); // softness=1 equivalent
+            const idx = (py * VW + px) * 4;
+            vd[idx] = Math.floor(c1[0] * (1 - t) + c2[0] * t);
+            vd[idx + 1] = Math.floor(c1[1] * (1 - t) + c2[1] * t);
+            vd[idx + 2] = Math.floor(c1[2] * (1 - t) + c2[2] * t);
+            vd[idx + 3] = 255;
+          }
+        }
+        voronoiRawCtx.putImageData(voronoiRawImg, 0, 0);
+        voronoiBlurCtx.clearRect(0, 0, DW, DH);
+        voronoiBlurCtx.imageSmoothingEnabled = true;
+        voronoiBlurCtx.imageSmoothingQuality = 'high';
+        voronoiBlurCtx.filter = 'blur(50px)';
+        voronoiBlurCtx.drawImage(voronoiRawCanvas, 0, 0, DW, DH);
+        voronoiBlurCtx.filter = 'none';
+      }
+
+      function applyMouseInfluence() {
+        if (!mouseActive) return;
+        const mx = mouseX / DW * simW, my = mouseY / DH * simH;
+        const radius = 12, strength = 0.009;
+        const ix = Math.floor(mx), iy = Math.floor(my), ri = Math.ceil(radius);
+        for (let dy = -ri; dy <= ri; dy++) for (let dx = -ri; dx <= ri; dx++) {
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist > radius) continue;
+          const falloff = 1 - dist / radius;
+          const x = ((ix + dx) + simW) % simW, y = ((iy + dy) + simH) % simH, idx = y * simW + x;
+          B[idx] = Math.min(1, B[idx] + strength * falloff);
+          A[idx] = Math.max(0, A[idx] - strength * falloff * 0.5);
+        }
+      }
+
+      function initBuffers() {
+        DW = canvas.width; DH = canvas.height;
+        simW = Math.floor(DW / ZOOM); simH = Math.floor(DH / ZOOM);
+        A = new Float32Array(simW * simH); B = new Float32Array(simW * simH);
+        nA = new Float32Array(simW * simH); nB = new Float32Array(simW * simH);
+        simImg = new ImageData(simW, simH);
+        simCanvas = document.createElement('canvas'); simCanvas.width = simW; simCanvas.height = simH; simCtx = simCanvas.getContext('2d');
+        const VW = Math.floor(DW / 3), VH = Math.floor(DH / 3);
+        voronoiRawCanvas = document.createElement('canvas'); voronoiRawCanvas.width = VW; voronoiRawCanvas.height = VH;
+        voronoiRawCtx = voronoiRawCanvas.getContext('2d'); voronoiRawImg = voronoiRawCtx.createImageData(VW, VH);
+        voronoiBlurCanvas = document.createElement('canvas'); voronoiBlurCanvas.width = DW; voronoiBlurCanvas.height = DH;
+        voronoiBlurCtx = voronoiBlurCanvas.getContext('2d');
+        maskCanvas = document.createElement('canvas'); maskCanvas.width = simW; maskCanvas.height = simH;
+        maskCtx = maskCanvas.getContext('2d');
+      }
+
+      function seed() {
+        A.fill(1); B.fill(0);
+        for (let s = 0; s < 520; s++) {
+          const cx = Math.floor(Math.random() * simW), cy = Math.floor(Math.random() * simH);
+          const r = 3 + Math.floor(Math.random() * 5); // radius 3–7
+          for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+            if (dx * dx + dy * dy <= r * r) {
+              const x = ((cx + dx) + simW) % simW, y = ((cy + dy) + simH) % simH;
+              A[y * simW + x] = 0; B[y * simW + x] = 1;
+            }
+          }
+        }
+      }
+
+      function step() {
+        const W = simW, H = simH, dA = 0.2097, dB = 0.105, f = F_BASE, k = K_BASE;
+        tickParticles(); applyMouseInfluence();
+        for (let y = 0; y < H; y++) {
+          const ym = ((y - 1) + H) % H, yp = (y + 1) % H;
+          for (let x = 0; x < W; x++) {
+            const xm = ((x - 1) + W) % W, xp = (x + 1) % W, i = y * W + x;
+            const a = A[i], b = B[i];
+            const la = A[ym * W + x] + A[yp * W + x] + A[y * W + xm] + A[y * W + xp] - 4 * a;
+            const lb = B[ym * W + x] + B[yp * W + x] + B[y * W + xm] + B[y * W + xp] - 4 * b;
+            const abb = a * b * b;
+            nA[i] = Math.max(0, Math.min(1, a + dA * la - abb + f * (1 - a)));
+            nB[i] = Math.max(0, Math.min(1, b + dB * lb + abb - (k + f) * b));
+          }
+        }
+        const tA = A; A = nA; nA = tA; const tB = B; B = nB; nB = tB;
+      }
+
+      function draw() {
+        rebuildVoronoi();
+        // Find actual max B this frame, then lerp smoothMaxB toward it very slowly.
+        // Using smoothMaxB for normalization keeps the contrast(20) threshold stable
+        // frame-to-frame (no width oscillation) while still mapping the real value range.
+        const d = simImg.data;
+        let maxB = 0;
+        for (let i = 0; i < simW * simH; i++) { if (B[i] > maxB) maxB = B[i]; }
+        smoothMaxB += (maxB - smoothMaxB) * 0.015;
+        const scale = 255 / (smoothMaxB || 0.35);
+        for (let i = 0; i < simW * simH; i++) {
+          const v = Math.min(255, Math.floor(B[i] * scale)), p = i * 4;
+          d[p] = d[p + 1] = d[p + 2] = v; d[p + 3] = 255;
+        }
+        simCtx.putImageData(simImg, 0, 0);
+        // GPU-only threshold: blur softens edges, contrast(20) creates binary-ish mask at 50%
+        // Replaces two getImageData readbacks + a 500K-iteration JS loop
+        maskCtx.clearRect(0, 0, simW, simH);
+        maskCtx.filter = 'blur(' + (BLUR / ZOOM) + 'px) contrast(20)';
+        maskCtx.drawImage(simCanvas, 0, 0);
+        maskCtx.filter = 'none';
+        // Composite: Voronoi color layer, clipped by the mask (GPU-scaled to display resolution)
+        ctx.clearRect(0, 0, DW, DH);
+        ctx.drawImage(voronoiBlurCanvas, 0, 0);
+        ctx.globalCompositeOperation = 'multiply';
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'medium';
+        ctx.drawImage(maskCanvas, 0, 0, DW, DH);
+        ctx.globalCompositeOperation = 'source-over';
+      }
+
+      // --- State cache (localStorage) ---
+      // Stores a downsampled snapshot of B so subsequent visits skip warmup entirely.
+      const CACHE_KEY = 'rd_state_v5'; // bump version when sim constants change
+      const CACHE_W = 320, CACHE_H = 180;
+
+      function saveCachedState() {
+        try {
+          const bytes = new Uint8Array(CACHE_W * CACHE_H);
+          for (let y = 0; y < CACHE_H; y++) {
+            for (let x = 0; x < CACHE_W; x++) {
+              const sx = Math.round(x / (CACHE_W - 1) * (simW - 1));
+              const sy = Math.round(y / (CACHE_H - 1) * (simH - 1));
+              bytes[y * CACHE_W + x] = Math.round(B[sy * simW + sx] * 255);
+            }
+          }
+          let bin = '';
+          for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+          localStorage.setItem(CACHE_KEY, btoa(bin));
+        } catch (e) { }
+      }
+
+      function loadCachedState() {
+        try {
+          const b64 = localStorage.getItem(CACHE_KEY);
+          if (!b64) return false;
+          const bin = atob(b64);
+          if (bin.length !== CACHE_W * CACHE_H) return false;
+          A.fill(1); B.fill(0);
+          for (let y = 0; y < simH; y++) {
+            for (let x = 0; x < simW; x++) {
+              const sx = Math.round(x / (simW - 1) * (CACHE_W - 1));
+              const sy = Math.round(y / (simH - 1) * (CACHE_H - 1));
+              const val = bin.charCodeAt(sy * CACHE_W + sx) / 255;
+              B[y * simW + x] = val;
+              A[y * simW + x] = 1 - val;
+            }
+          }
+          return true;
+        } catch (e) { return false; }
+      }
+      // --- End cache ---
+
+      initBuffers();
+      initParticles();
+
+      let frameN = 0, lastTime = 0, paused = false;
+
+      document.addEventListener('visibilitychange', function () {
+        paused = document.hidden;
+        if (!paused) lastTime = performance.now();
+      });
+
+      function animate(now) {
+        if (!paused && now - lastTime >= STEP_INTERVAL) {
+          step(); step(); draw(); lastTime = now;
+        }
+        requestAnimationFrame(animate);
+      }
+
+      if (loadCachedState()) {
+        // Cached warm state — draw immediately and start live sim, no warmup needed
+        draw();
+        lastTime = performance.now();
+        requestAnimationFrame(animate);
+      } else {
+        // First visit — time-budgeted warmup: cram in as many steps as hardware allows
+        // per rAF frame (~30ms budget each) for a max of 1500ms wall-clock, then cache.
+        seed();
+        const WARMUP_MS = 1500;
+        const STEP_BUDGET_MS = 30;
+        const warmupStart = performance.now();
+        function warmup() {
+          const t0 = performance.now();
+          while (performance.now() - t0 < STEP_BUDGET_MS) step();
+          if (performance.now() - warmupStart < WARMUP_MS) {
+            requestAnimationFrame(warmup);
+            return;
+          }
+          draw();
+          saveCachedState();
+          lastTime = performance.now();
+          requestAnimationFrame(animate);
+        }
+        requestAnimationFrame(warmup);
+      }
+    })();
+
+    // ===================== PROJECT CAROUSEL =====================
+    (function () {
+      var track = document.getElementById('proj-track');
+      if (!track) return;
+      var cards = Array.from(track.querySelectorAll('.proj-card'));
+      var N = cards.length;
+      var activeIndex = 0;
+      var touchStartX = 0;
+
+      function getActiveW() {
+        return window.innerWidth < 640 ? window.innerWidth * 0.72 : Math.min(640, window.innerWidth * 0.68);
+      }
+      function getAdjW() {
+        return window.innerWidth < 640 ? window.innerWidth * 0.20 : Math.min(280, window.innerWidth * 0.24);
+      }
+      function getGap() { return window.innerWidth < 640 ? 12 : 20; }
+
+      function updateCarousel() {
+        var W_ACTIVE = getActiveW();
+        var W_ADJ = getAdjW();
+        var GAP = getGap();
+        var containerW = track.parentElement.offsetWidth;
+
+        cards.forEach(function (card, i) {
+          var dist = Math.abs(i - activeIndex);
+          if (dist === 0) {
+            card.dataset.state = 'active';
+            card.style.width = W_ACTIVE + 'px';
+          } else if (dist === 1) {
+            card.dataset.state = 'adj';
+            card.style.width = W_ADJ + 'px';
+          } else {
+            card.dataset.state = 'far';
+            card.style.width = '0px';
+          }
+        });
+
+        // Center the active card in the container
+        var leftEdge = 0;
+        for (var i = 0; i < activeIndex; i++) {
+          leftEdge += (activeIndex - i === 1 ? W_ADJ : 0) + GAP;
+        }
+        var offset = (containerW - W_ACTIVE) / 2 - leftEdge;
+        track.style.transform = 'translateX(' + offset + 'px)';
+
+        var counter = document.getElementById('proj-counter');
+        if (counter) counter.textContent = (activeIndex + 1) + ' / ' + N;
+      }
+
+      function goTo(index) {
+        // Close details on departing card
+        cards[activeIndex].classList.remove('details-open');
+        var oldBtn = cards[activeIndex].querySelector('.proj-details-btn');
+        if (oldBtn) oldBtn.textContent = 'Details +';
+        activeIndex = ((index % N) + N) % N;
+        updateCarousel();
+      }
+
+      // Click an adjacent card to focus it
+      cards.forEach(function (card, i) {
+        card.addEventListener('click', function () {
+          if (card.dataset.state === 'adj') goTo(i);
+        });
+      });
+
+      // Arrow buttons
+      var prevBtn = document.getElementById('proj-prev');
+      var nextBtn = document.getElementById('proj-next');
+      if (prevBtn) prevBtn.addEventListener('click', function () { goTo(activeIndex - 1); });
+      if (nextBtn) nextBtn.addEventListener('click', function () { goTo(activeIndex + 1); });
+
+      // Keyboard (only when experience section is visible)
+      window.addEventListener('keydown', function (e) {
+        var section = document.getElementById('experience');
+        if (!section) return;
+        var r = section.getBoundingClientRect();
+        if (r.top >= window.innerHeight || r.bottom <= 0) return;
+        if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(activeIndex - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); goTo(activeIndex + 1); }
+      });
+
+      // Touch swipe
+      var carousel = track.parentElement;
+      carousel.addEventListener('touchstart', function (e) {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      carousel.addEventListener('touchend', function (e) {
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) { dx < 0 ? goTo(activeIndex + 1) : goTo(activeIndex - 1); }
+      }, { passive: true });
+
+      // Details toggle — delegated on the track
+      track.addEventListener('click', function (e) {
+        var btn = e.target.closest('.proj-details-btn');
+        if (!btn) return;
+        e.stopPropagation();
+        var card = btn.closest('.proj-card');
+        if (!card || card.dataset.state !== 'active') return;
+        var isOpen = card.classList.toggle('details-open');
+        btn.textContent = isOpen ? 'Details \u2212' : 'Details +';
+      });
+
+      // Resize
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(updateCarousel, 100);
+      });
+
+      updateCarousel();
+    })();
+  </script>
+
+</body>
+
+</html>
