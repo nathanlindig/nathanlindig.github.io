@@ -43,81 +43,26 @@
       position: relative;
     }
 
-    .proj-carousel-wrap::before,
-    .proj-carousel-wrap::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 6vw;
-      max-width: 60px;
-      z-index: 2;
-      pointer-events: none;
-    }
-
-    .proj-carousel-wrap::before {
-      left: 0;
-      background: linear-gradient(to right, #0a0a0c, transparent);
-    }
-
-    .proj-carousel-wrap::after {
-      right: 0;
-      background: linear-gradient(to left, #0a0a0c, transparent);
-    }
-
     .proj-carousel {
       overflow: hidden;
-      padding: 32px 0 40px;
+      padding: 24px 0 32px;
     }
 
     .proj-track {
       display: flex;
-      gap: 20px;
       align-items: flex-start;
-      transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       will-change: transform;
     }
 
     .proj-card {
-      flex: 0 0 auto;
+      flex: 0 0 100%;
+      width: 100%;
       box-sizing: border-box;
       overflow: hidden;
       padding: 1.75rem;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(212, 175, 55, 0.25);
       background: #0d0d10;
-      transition:
-        width 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-        opacity 0.28s ease,
-        transform 0.28s ease,
-        border-color 0.2s ease;
-      will-change: transform, opacity;
-    }
-
-    .proj-card[data-state="active"] {
-      opacity: 1;
-      transform: scale(1);
-      border-color: rgba(212, 175, 55, 0.25);
-    }
-
-    .proj-card[data-state="adj"] {
-      opacity: 0.6;
-      transform: scale(0.98);
-      transform-origin: top center;
-      cursor: pointer;
-    }
-
-    .proj-card[data-state="adj"]:hover {
-      opacity: 0.82;
-    }
-
-    .proj-card[data-state="far"] {
-      width: 0 !important;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-      border-left-width: 0 !important;
-      border-right-width: 0 !important;
-      opacity: 0;
-      pointer-events: none;
     }
 
     /* Badge + date row */
@@ -286,26 +231,39 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
-      margin-top: 24px;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 16px;
     }
 
-    .proj-nav-btn {
-      width: 40px;
-      height: 40px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: none;
-      cursor: pointer;
+    .proj-swipe-hint {
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: rgba(255, 255, 255, 0.6);
-      transition: border-color 0.2s, color 0.2s;
+      gap: 6px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.28);
     }
 
-    .proj-nav-btn:hover {
-      border-color: rgba(212, 175, 55, 0.5);
-      color: #d4af37;
+    .proj-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .proj-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .proj-dot.active {
+      background: #d4af37;
+      transform: scale(1.4);
     }
 
     .proj-counter {
@@ -313,7 +271,6 @@
       font-weight: 700;
       letter-spacing: 0.25em;
       color: rgba(255, 255, 255, 0.25);
-      min-width: 48px;
       text-align: center;
     }
 
@@ -332,6 +289,8 @@
       z-index: 0;
       pointer-events: none;
       opacity: 0.10;
+      transform: translate3d(0, 0, 0);
+      will-change: transform;
     }
 
     /* Sections that reveal the RD background — transparent */
@@ -981,11 +940,11 @@
         <h1 class="hero-title text-7xl md:text-[11rem] font-black uppercase mb-6">
           NATHAN<br />LINDIG<span class="text-brand-gold">.</span>
         </h1>
-        <p class="text-brand-gold text-lg md:text-2xl font-bold tracking-[0.3em] uppercase mb-12">
+        <p class="text-brand-gold text-2xl md:text-4xl font-bold tracking-[0.3em] uppercase mb-12">
           Character Technical Artist
         </p>
         <div class="max-w-2xl">
-          <p class="text-2xl md:text-3xl text-gray-200 font-light leading-tight">
+          <p class="text-lg md:text-xl text-gray-200 font-light leading-tight">
             Artist instincts. Engineer thinking.<br />
             <span class="text-white font-medium">Fluent across the full CG pipeline.</span>
           </p>
@@ -1022,29 +981,26 @@
           <div class="md:col-span-8 space-y-6">
             <p class="text-lg md:text-xl leading-relaxed font-light text-gray-200">
               I'm a Character Technical Artist wired to see the world through the eyes of an <span
-                class="text-brand-gold font-normal">artist</span> &mdash; but trained to think through problems like an
-              <span class="text-brand-gold font-normal">engineer</span>. Where an artist focuses on the result they want
-              to
-              create, I'm thinking about how to approach the problem and how to make the process better, easier, faster,
-              and more enjoyable for everyone involved.
+                class="text-brand-gold font-normal">artist</span>, but trained to think through problems like an
+              <span class="text-brand-gold font-normal">engineer</span>. I go beyond simply identifying how to help
+              artists achieve a desired result, seeking to make the production process more efficient, effective, and
+              enjoyable for everyone involved.
             </p>
             <p class="text-base text-gray-400 leading-relaxed">
-              My background spans every aspect of CG production &mdash; modeling, texturing, rigging, shading, pipeline
-              development, and tooling &mdash; across VR, social platforms, and real-time character systems. That
-              breadth
-              gives me a unique ability to anticipate how a decision in one part of a pipeline ripples downstream, and
-              to design solutions with that full context in mind.
+              I have a breadth of experience across the CG production pipeline, specializing in modeling, texturing,
+              rigging, pipeline development, and tooling for VR, social platforms, and real-time character systems.
+              Providing me a unique ability to collaborate across disciplines and departments, anticipate downstream
+              production impacts of decisions, and design solutions with that full context in mind.
             </p>
             <p class="text-base text-gray-400 leading-relaxed">
-              I don't settle for the tools in front of me. I'm always looking for new techniques and better approaches
-              &mdash;
+              I don't settle for the tools in front of me. I'm always looking for new techniques and better approaches,
               not just to grow my own capabilities, but to expand what's possible for the teams I serve. That same
-              instinct extends to the people I work with: I can sit with an engineer and explain how an artist sees a
-              problem, and I can sit with an artist and help them understand why constraints exist. Translation between
-              disciplines &mdash; in both directions &mdash; is something I do naturally, and it's one of the things I
-              value
-              most
-              about the work.
+              instinct extends to the people I work with. I can sit with an engineer and explain how an artist sees and
+              approaches a problem. I can sit with an artist and help them understand why constraints exist and find
+              ways
+              to achieve their vision within them. Translation between disciplines, in both directions, is something I
+              do
+              naturally, and it's one of the things I value most about the work.
             </p>
           </div>
         </div>
@@ -1285,6 +1241,9 @@
                         system, directed ~7 artists through a month of manual skin weight production, and led mix and
                         match QA across hundreds of asset combinations.</p>
                     </div>
+                    <img src="resources/meta-avatars-2.png" alt="Style 2 Avatar"
+                      style="width:100%;height:auto;margin-top:14px;border:1px solid rgba(255,255,255,0.07);display:block;"
+                      loading="lazy" />
                   </div>
                 </div>
               </div>
@@ -1370,6 +1329,9 @@
                         approach broke down for coily and curly hair &mdash; then contributed to the solution for those
                         cases too.</p>
                     </div>
+                    <img src="resources/hair_update.PNG" alt="Avatar hair system"
+                      style="width:100%;height:auto;margin-top:14px;border:1px solid rgba(255,255,255,0.07);display:block;"
+                      loading="lazy" />
                   </div>
                 </div>
               </div>
@@ -1398,6 +1360,9 @@
                         feature shape updates as part of an overhaul of the facial feature catalog for the Instagram
                         rollout.</p>
                     </div>
+                    <img src="resources/face_update.PNG" alt="Meta avatar face update"
+                      style="width:100%;height:auto;margin-top:14px;border:1px solid rgba(255,255,255,0.07);display:block;"
+                      loading="lazy" />
                   </div>
                 </div>
               </div>
@@ -1435,17 +1400,17 @@
 
         <!-- Navigation (mobile only) -->
         <div class="proj-nav md:hidden">
-          <button aria-label="Previous project" class="proj-nav-btn" id="proj-prev">
-            <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="16">
+          <div class="proj-swipe-hint">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path d="M15 18l-6-6 6-6" />
             </svg>
-          </button>
-          <span class="proj-counter" id="proj-counter">1 / 8</span>
-          <button aria-label="Next project" class="proj-nav-btn" id="proj-next">
-            <svg fill="none" height="16" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" width="16">
+            Swipe to browse
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
               <path d="M9 18l6-6-6-6" />
             </svg>
-          </button>
+          </div>
+          <div class="proj-dots" id="proj-dots"></div>
+          <span class="proj-counter" id="proj-counter">1 / 8</span>
         </div>
 
         <!-- Desktop Grid (2 rows x 4 cards) -->
@@ -1905,6 +1870,10 @@
           </svg>
           Send an Email
         </a>
+        <p class="mt-6 text-[11px] tracking-[0.15em] text-gray-500">
+          or email directly at <a href="mailto:nathanlindig@gmail.com"
+            class="text-gray-300 hover:text-brand-gold transition-colors">nathanlindig@gmail.com</a>
+        </p>
       </div>
     </section>
 
@@ -2049,9 +2018,11 @@
     // ---- Reaction Diffusion Background (V2) ----
     (function () {
       const canvas = document.getElementById('rd-canvas');
+      let DPR = 1;
       function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(window.innerWidth * DPR);
+        canvas.height = Math.round(window.innerHeight * DPR);
       }
       resize();
       let resizeTimeout;
@@ -2188,7 +2159,7 @@
       }
 
       function initBuffers() {
-        DW = canvas.width; DH = canvas.height;
+        DW = Math.round(canvas.width / DPR); DH = Math.round(canvas.height / DPR);
         simW = Math.floor(DW / ZOOM); simH = Math.floor(DH / ZOOM);
         A = new Float32Array(simW * simH); B = new Float32Array(simW * simH);
         nA = new Float32Array(simW * simH); nB = new Float32Array(simW * simH);
@@ -2257,6 +2228,7 @@
         maskCtx.drawImage(simCanvas, 0, 0);
         maskCtx.filter = 'none';
         // Composite: Voronoi color layer, clipped by the mask (GPU-scaled to display resolution)
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         ctx.clearRect(0, 0, DW, DH);
         ctx.drawImage(voronoiBlurCanvas, 0, 0);
         ctx.globalCompositeOperation = 'multiply';
@@ -2264,6 +2236,7 @@
         ctx.imageSmoothingQuality = 'medium';
         ctx.drawImage(maskCanvas, 0, 0, DW, DH);
         ctx.globalCompositeOperation = 'source-over';
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
       }
 
       // --- State cache (localStorage) ---
@@ -2361,70 +2334,39 @@
       var N = cards.length;
       var activeIndex = 0;
       var touchStartX = 0;
+      var touchStartY = 0;
 
-      function getActiveW() {
-        return window.innerWidth < 640 ? window.innerWidth * 0.72 : Math.min(640, window.innerWidth * 0.68);
+      // Build dot indicators
+      var dotsWrap = document.getElementById('proj-dots');
+      if (dotsWrap) {
+        cards.forEach(function (_, i) {
+          var dot = document.createElement('div');
+          dot.className = 'proj-dot' + (i === 0 ? ' active' : '');
+          dotsWrap.appendChild(dot);
+        });
       }
-      function getAdjW() {
-        return window.innerWidth < 640 ? window.innerWidth * 0.20 : Math.min(280, window.innerWidth * 0.24);
+
+      function updateDots() {
+        if (!dotsWrap) return;
+        Array.from(dotsWrap.children).forEach(function (dot, i) {
+          dot.classList.toggle('active', i === activeIndex);
+        });
       }
-      function getGap() { return window.innerWidth < 640 ? 12 : 20; }
 
       function updateCarousel() {
-        var W_ACTIVE = getActiveW();
-        var W_ADJ = getAdjW();
-        var GAP = getGap();
         var containerW = track.parentElement.offsetWidth;
-
-        cards.forEach(function (card, i) {
-          var dist = Math.abs(i - activeIndex);
-          if (dist === 0) {
-            card.dataset.state = 'active';
-            card.style.width = W_ACTIVE + 'px';
-          } else if (dist === 1) {
-            card.dataset.state = 'adj';
-            card.style.width = W_ADJ + 'px';
-          } else {
-            card.dataset.state = 'far';
-            card.style.width = '0px';
-          }
-        });
-
-        // Center the active card in the container
-        var leftEdge = 0;
-        for (var i = 0; i < activeIndex; i++) {
-          leftEdge += (activeIndex - i === 1 ? W_ADJ : 0) + GAP;
-        }
-        var offset = (containerW - W_ACTIVE) / 2 - leftEdge;
-        track.style.transform = 'translateX(' + offset + 'px)';
-
+        track.style.transform = 'translateX(' + (-activeIndex * containerW) + 'px)';
         var counter = document.getElementById('proj-counter');
         if (counter) counter.textContent = (activeIndex + 1) + ' / ' + N;
+        updateDots();
       }
 
       function goTo(index) {
-        // Close details on departing card
-        cards[activeIndex].classList.remove('details-open');
-        var oldBtn = cards[activeIndex].querySelector('.proj-details-btn');
-        if (oldBtn) oldBtn.textContent = 'Details +';
         activeIndex = ((index % N) + N) % N;
         updateCarousel();
       }
 
-      // Click an adjacent card to focus it
-      cards.forEach(function (card, i) {
-        card.addEventListener('click', function () {
-          if (card.dataset.state === 'adj') goTo(i);
-        });
-      });
-
-      // Arrow buttons
-      var prevBtn = document.getElementById('proj-prev');
-      var nextBtn = document.getElementById('proj-next');
-      if (prevBtn) prevBtn.addEventListener('click', function () { goTo(activeIndex - 1); });
-      if (nextBtn) nextBtn.addEventListener('click', function () { goTo(activeIndex + 1); });
-
-      // Keyboard (only when experience section is visible)
+      // Keyboard (only when experience section is in view)
       window.addEventListener('keydown', function (e) {
         var section = document.getElementById('experience');
         if (!section) return;
@@ -2434,26 +2376,19 @@
         if (e.key === 'ArrowRight') { e.preventDefault(); goTo(activeIndex + 1); }
       });
 
-      // Touch swipe
+      // Touch swipe — ignore vertical scrolls
       var carousel = track.parentElement;
       carousel.addEventListener('touchstart', function (e) {
         touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
       }, { passive: true });
       carousel.addEventListener('touchend', function (e) {
         var dx = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(dx) > 50) { dx < 0 ? goTo(activeIndex + 1) : goTo(activeIndex - 1); }
+        var dy = e.changedTouches[0].clientY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+          dx < 0 ? goTo(activeIndex + 1) : goTo(activeIndex - 1);
+        }
       }, { passive: true });
-
-      // Details toggle — delegated on the track
-      track.addEventListener('click', function (e) {
-        var btn = e.target.closest('.proj-details-btn');
-        if (!btn) return;
-        e.stopPropagation();
-        var card = btn.closest('.proj-card');
-        if (!card || card.dataset.state !== 'active') return;
-        var isOpen = card.classList.toggle('details-open');
-        btn.textContent = isOpen ? 'Details \u2212' : 'Details +';
-      });
 
       // Resize
       var resizeTimer;
