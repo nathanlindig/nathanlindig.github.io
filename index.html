@@ -884,6 +884,54 @@
     .pg-close:hover {
       color: #e8c84a;
     }
+
+    /* Card media image */
+    .pg-contrib-media-row {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .pg-contrib-media-row .pg-contrib {
+      flex: 1 1 0;
+      min-width: 0;
+      margin-bottom: 0;
+    }
+
+    .pg-media {
+      flex: 0 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      overflow: hidden;
+      align-self: flex-start;
+    }
+
+    .pg-media img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 50vh;
+      object-fit: contain;
+    }
+
+    /* Desktop: image sits to the right of the text */
+    @media (min-width: 768px) {
+      .pg-contrib-media-row {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      .pg-media {
+        flex: 0 0 20vw;
+        width: 20vw;
+        align-self: flex-start;
+      }
+
+      .pg-media img {
+        width: 100%;
+        max-height: 50vh;
+      }
+    }
   </style>
 </head>
 
@@ -942,10 +990,6 @@
             <span class="text-white font-medium">Fluent across the full CG pipeline.</span>
           </p>
         </div>
-      </div>
-      <div
-        class="absolute bottom-0 right-0 opacity-[0.03] select-none pointer-events-none translate-y-1/4 translate-x-1/4">
-        <span class="text-[30rem] font-black leading-none uppercase">TA</span>
       </div>
       <!-- Scroll indicator -->
       <div
@@ -1483,12 +1527,17 @@
                     <span class="pg-tag">Avatar Systems</span>
                     <span class="pg-tag">Pipeline</span>
                   </div>
-                  <div class="pg-contrib">
-                    <p class="pg-contrib-label">Contribution</p>
-                    <p class="pg-contrib-text">Ran the prototyping workstream that defined the execution strategy and
-                      technical requirements for clothing production, built the initial skin weight transfer system,
-                      directed ~7 artists through a month of manual skin weight production, and led mix and match QA
-                      across hundreds of asset combinations.</p>
+                  <div class="pg-contrib-media-row">
+                    <div class="pg-contrib">
+                      <p class="pg-contrib-label">Contribution</p>
+                      <p class="pg-contrib-text">Ran the prototyping workstream that defined the execution strategy and
+                        technical requirements for clothing production, built the initial skin weight transfer system,
+                        directed ~7 artists through a month of manual skin weight production, and led mix and match QA
+                        across hundreds of asset combinations.</p>
+                    </div>
+                    <div class="pg-media">
+                      <img src="resources/meta-avatars-2.png" alt="Style 2 Avatar launch" loading="lazy" />
+                    </div>
                   </div>
                   <button class="pg-close">Collapse &times;</button>
                 </div>
@@ -1571,12 +1620,17 @@
                     <span class="pg-tag">Rendering</span>
                     <span class="pg-tag">Art / Engineering Bridge</span>
                   </div>
-                  <div class="pg-contrib">
-                    <p class="pg-contrib-label">Contribution</p>
-                    <p class="pg-contrib-text">Defined the new texture map format, developed the Substance Painter
-                      tooling that made it possible for artists to author it correctly, and identified where the
-                      approach broke down for coily and curly hair &mdash; then contributed to the solution for those
-                      cases too.</p>
+                  <div class="pg-contrib-media-row">
+                    <div class="pg-contrib">
+                      <p class="pg-contrib-label">Contribution</p>
+                      <p class="pg-contrib-text">Defined the new texture map format, developed the Substance Painter
+                        tooling that made it possible for artists to author it correctly, and identified where the
+                        approach broke down for coily and curly hair &mdash; then contributed to the solution for those
+                        cases too.</p>
+                    </div>
+                    <div class="pg-media">
+                      <img src="resources/hair_update.PNG" alt="Avatar hair system overhaul" loading="lazy" />
+                    </div>
                   </div>
                   <button class="pg-close">Collapse &times;</button>
                 </div>
@@ -1599,12 +1653,17 @@
                     <span class="pg-tag">VR</span>
                     <span class="pg-tag">Avatar Systems</span>
                   </div>
-                  <div class="pg-contrib">
-                    <p class="pg-contrib-label">Contribution</p>
-                    <p class="pg-contrib-text">Built three Maya GUI tools that improved artist efficiency and helped
-                      de-risk launch blocking efforts for the Horizon Worlds launch. Personally sculpted 40+ facial
-                      feature shape updates as part of an overhaul of the facial feature catalog for the Instagram
-                      rollout.</p>
+                  <div class="pg-contrib-media-row">
+                    <div class="pg-contrib">
+                      <p class="pg-contrib-label">Contribution</p>
+                      <p class="pg-contrib-text">Built three Maya GUI tools that improved artist efficiency and helped
+                        de-risk launch blocking efforts for the Horizon Worlds launch. Personally sculpted 40+ facial
+                        feature shape updates as part of an overhaul of the facial feature catalog for the Instagram
+                        rollout.</p>
+                    </div>
+                    <div class="pg-media">
+                      <img src="resources/face_update.PNG" alt="Meta avatar face shape catalog update" loading="lazy" />
+                    </div>
                   </div>
                   <button class="pg-close">Collapse &times;</button>
                 </div>
@@ -1831,15 +1890,21 @@
 
     <!-- Contact -->
     <section class="py-64 px-6 text-center overflow-hidden relative section-shadow-top" id="contact">
-      <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] select-none pointer-events-none">
-        <h2 class="text-[15vw] font-black uppercase whitespace-nowrap">LET'S WORK TOGETHER</h2>
-      </div>
       <div class="max-w-4xl mx-auto relative z-10">
         <h3 class="text-[10px] font-black uppercase tracking-[0.5em] text-brand-gold mb-12">Contact</h3>
         <p class="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-12">Let's build<br />something.</p>
         <p class="text-xl text-gray-400 font-medium max-w-lg mx-auto leading-relaxed mb-16">
-          Currently open to new opportunities.<br />Contact information available upon request.
+          Currently open to new opportunities.
         </p>
+        <a href="mailto:nathanlindig@gmail.com"
+          class="inline-flex items-center gap-3 border border-brand-gold text-brand-gold px-10 py-4 text-[11px] font-black uppercase tracking-[0.25em] hover:bg-brand-gold hover:text-brand-dark transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          Send an Email
+        </a>
       </div>
     </section>
 
