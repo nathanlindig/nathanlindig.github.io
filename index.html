@@ -2355,7 +2355,7 @@
         requestAnimationFrame(warmup);
       }
 
-      // Tuning bridge — exposes live vars to the panel IIFE
+      // Tuning bridge — exposes live vars and source canvases to the panel IIFE
       window.__rdTune = {
         getBlur: function () { return BLUR; },
         setBlur: function (v) { BLUR = v; },
@@ -2363,7 +2363,13 @@
         setContrast: function (v) { CONTRAST = v; },
         getThresh: function () { return THRESH; },
         setThresh: function (v) { THRESH = v; },
-        redraw: draw
+        redraw: draw,
+        canvases: function () {
+          return { sim: simCanvas, mask: maskCanvas, voronoi: voronoiBlurCanvas, output: canvas };
+        },
+        filters: function () {
+          return { blur: BLUR, zoom: ZOOM, contrast: CONTRAST, thresh: THRESH };
+        }
       };
     })();
 
@@ -2529,10 +2535,13 @@
         var bridge = window.__rdTune;
         if (!bridge) { panel.textContent = 'RD not ready'; return; }
 
+        var layerCanvases = [];
+
         function makeRow(label, id, min, max, step, getter, setter) {
           return row(label, id, min, max, step, getter, function (v) {
             setter(v);
             bridge.redraw();
+            refreshLayers();
           });
         }
 
@@ -2545,6 +2554,85 @@
         panel.appendChild(makeRow('threshold', 'thresh', 0.15, 0.85, 0.01,
           function () { return bridge.getThresh(); },
           function (v) { bridge.setThresh(v); }));
+
+        // ---- Layer viewer ----
+        var layerToggle = document.createElement('button');
+        layerToggle.textContent = '▸ Show layers';
+        layerToggle.style.cssText = 'margin-top:10px;background:none;border:1px solid rgba(212,175,55,0.35);color:#d4af37;font:bold 9px monospace;letter-spacing:0.15em;padding:4px 10px;cursor:pointer;width:100%';
+        panel.appendChild(layerToggle);
+
+        var layerWrap = document.createElement('div');
+        layerWrap.style.display = 'none';
+        layerWrap.style.marginTop = '10px';
+        panel.appendChild(layerWrap);
+
+        var layersVisible = false;
+        layerToggle.addEventListener('click', function () {
+          layersVisible = !layersVisible;
+          layerWrap.style.display = layersVisible ? 'block' : 'none';
+          layerToggle.textContent = (layersVisible ? '▾' : '▸') + ' Show layers';
+          if (layersVisible) buildLayers();
+        });
+
+        var W = 180, H = 100; // thumbnail size
+
+        // Stages: label, filter applied to simCanvas
+        var stages = [
+          { label: '1. RD raw (B values)', filter: 'none' },
+          { label: '2. + brightness (threshold)', filter: null },  // computed
+          { label: '3. + blur', filter: null },
+          { label: '4. + contrast  ← mask', filter: null },
+          { label: '5. Voronoi color (blurred)', src: 'voronoi' },
+          { label: '6. Final (voronoi × mask)', src: 'output' }
+        ];
+
+        function buildLayers() {
+          layerWrap.innerHTML = '';
+          layerCanvases = [];
+          stages.forEach(function (s, i) {
+            var lbl = document.createElement('div');
+            lbl.textContent = s.label;
+            lbl.style.cssText = 'color:rgba(255,255,255,0.4);font-size:8.5px;margin-bottom:2px;margin-top:' + (i ? '8px' : '0');
+            layerWrap.appendChild(lbl);
+            var c = document.createElement('canvas');
+            c.width = W; c.height = H;
+            c.style.cssText = 'width:' + W + 'px;height:' + H + 'px;border:1px solid rgba(255,255,255,0.08);display:block';
+            layerWrap.appendChild(c);
+            layerCanvases.push({ canvas: c, stage: s });
+          });
+          refreshLayers();
+        }
+
+        function refreshLayers() {
+          if (!layersVisible) return;
+          var c = bridge.canvases();
+          var f = bridge.filters();
+          var brt = (0.5 / f.thresh).toFixed(3);
+          var blurPx = (f.blur / f.zoom).toFixed(2);
+          var stageFilters = [
+            'none',
+            'brightness(' + brt + ')',
+            'brightness(' + brt + ') blur(' + blurPx + 'px)',
+            'brightness(' + brt + ') blur(' + blurPx + 'px) contrast(' + f.contrast + ')'
+          ];
+          layerCanvases.forEach(function (item) {
+            var tc = item.canvas, s = item.stage;
+            var tx = tc.getContext('2d');
+            tx.clearRect(0, 0, W, H);
+            if (s.src === 'voronoi') {
+              tx.drawImage(c.voronoi, 0, 0, W, H);
+            } else if (s.src === 'output') {
+              // Draw from main output canvas (already DPR-scaled — just thumbnail it)
+              tx.drawImage(c.output, 0, 0, W, H);
+            } else {
+              var idx = stages.indexOf(s);
+              var filt = stageFilters[idx] || 'none';
+              tx.filter = filt;
+              tx.drawImage(c.sim, 0, 0, W, H);
+              tx.filter = 'none';
+            }
+          });
+        }
 
         var hint = document.createElement('div');
         hint.style.cssText = 'margin-top:10px;color:rgba(255,255,255,0.25);font-size:9px';
