@@ -1175,6 +1175,21 @@
               class="text-brand-gold font-normal">&amp;</span> Contributions</h2>
         </div>
 
+        <!-- Navigation (mobile only) -->
+        <div class="proj-nav md:hidden">
+          <div class="proj-swipe-hint">
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+            Swipe to browse
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </div>
+          <div class="proj-dots" id="proj-dots"></div>
+          <span class="proj-counter" id="proj-counter">1 / 8</span>
+        </div>
+
         <!-- Mobile Carousel — visible on mobile only -->
         <div class="proj-carousel-wrap md:hidden">
           <div class="proj-carousel">
@@ -1416,21 +1431,6 @@
             </div><!-- end .proj-track -->
           </div><!-- end .proj-carousel -->
         </div><!-- end .proj-carousel-wrap -->
-
-        <!-- Navigation (mobile only) -->
-        <div class="proj-nav md:hidden">
-          <div class="proj-swipe-hint">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-            Swipe to browse
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </div>
-          <div class="proj-dots" id="proj-dots"></div>
-          <span class="proj-counter" id="proj-counter">1 / 8</span>
-        </div>
 
         <!-- Desktop Grid (2 rows x 4 cards) -->
         <div class="proj-grid" id="proj-grid">
@@ -2045,13 +2045,13 @@
       }
       resize();
       let resizeTimeout;
-      let prevResizeW = canvas.width;
+      let prevLogicalW = window.innerWidth;
       window.addEventListener('resize', () => {
-        const newW = Math.round(window.innerWidth * (window.devicePixelRatio || 1));
-        // Mobile URL-bar show/hide only changes height — ignore those events entirely
-        // to prevent the simulation being wiped every time the user swipes/scrolls.
-        if (Math.abs(newW - prevResizeW) < 10) return;
-        prevResizeW = newW;
+        const newLogicalW = window.innerWidth;
+        // Only reinit on actual width changes (>30px). Pure height changes (mobile URL
+        // bar show/hide, keyboard appearing) are intentionally ignored.
+        if (Math.abs(newLogicalW - prevLogicalW) < 30) return;
+        prevLogicalW = newLogicalW;
         resize();
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
@@ -2261,10 +2261,10 @@
         ctx.clearRect(0, 0, DW, DH);
         ctx.drawImage(voronoiBlurCanvas, 0, 0);
         ctx.globalCompositeOperation = 'multiply';
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'medium';
+        ctx.imageSmoothingEnabled = false;
         ctx.drawImage(maskCanvas, 0, 0, DW, DH);
         ctx.globalCompositeOperation = 'source-over';
+        ctx.imageSmoothingEnabled = true;
         ctx.setTransform(1, 0, 0, 1, 0, 0);
       }
 
