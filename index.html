@@ -26,15 +26,9 @@
   <style data-purpose="custom-styling">
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap');
 
-    html {
-      background-color: #050505;
-      overscroll-behavior-y: none;
-    }
-
     body {
       background-color: #050505;
       font-family: 'Inter', sans-serif;
-      overscroll-behavior-y: none;
     }
 
     .hero-title {
@@ -2480,6 +2474,27 @@
           }
         });
       });
+    })();
+
+    // ===================== CANVAS BOTTOM FADE =====================
+    // Fades the RD canvas to transparent near the page bottom so overscroll
+    // reveals solid black instead of the animation.
+    (function () {
+      var rdCanvas = document.getElementById('rd-canvas');
+      if (!rdCanvas) return;
+      var BASE_OPACITY = 0.10;
+      var FADE_ZONE = 300;
+      var ticking = false;
+      function updateOpacity() {
+        var remaining = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+        rdCanvas.style.opacity = remaining >= FADE_ZONE
+          ? BASE_OPACITY
+          : Math.max(0, remaining / FADE_ZONE * BASE_OPACITY);
+        ticking = false;
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { requestAnimationFrame(updateOpacity); ticking = true; }
+      }, { passive: true });
     })();
   </script>
 
