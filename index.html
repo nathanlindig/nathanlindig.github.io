@@ -26,9 +26,15 @@
   <style data-purpose="custom-styling">
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap');
 
+    html {
+      background-color: #050505;
+      overscroll-behavior-y: none;
+    }
+
     body {
       background-color: #050505;
       font-family: 'Inter', sans-serif;
+      overscroll-behavior-y: none;
     }
 
     .hero-title {
@@ -981,7 +987,7 @@
     </header>
 
     <!-- About -->
-    <section class="py-40 px-6 border-y border-white/5 section-shadow-top section-shadow-bottom" id="about">
+    <section class="py-20 md:py-40 px-6 border-y border-white/5 section-shadow-top section-shadow-bottom" id="about">
       <div class="max-w-7xl mx-auto">
         <div class="grid md:grid-cols-12 gap-8 items-start">
           <!-- Left column: decorative/typographic -->
@@ -1027,7 +1033,7 @@
     </section>
 
     <!-- Skills -->
-    <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="skills">
+    <section class="py-20 md:py-40 px-6 section-shadow-top section-shadow-bottom" id="skills">
       <div class="max-w-7xl mx-auto">
         <h2 class="text-6xl font-black uppercase tracking-tighter mb-24">Skills</h2>
 
@@ -1167,7 +1173,7 @@
     </section>
 
     <!-- Experience -->
-    <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="experience">
+    <section class="py-20 md:py-40 px-6 section-shadow-top section-shadow-bottom" id="experience">
       <div class="max-w-7xl mx-auto">
 
         <div class="flex items-baseline justify-between mb-16 border-b border-white/10 pb-6">
@@ -1689,7 +1695,7 @@
 
 
     <!-- Career Timeline -->
-    <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="timeline">
+    <section class="py-20 md:py-40 px-6 section-shadow-top section-shadow-bottom" id="timeline">
       <div class="max-w-4xl mx-auto">
 
         <!-- Section heading — standalone, above the timeline graphic -->
@@ -1810,7 +1816,7 @@
     </section>
 
     <!-- Earlier Work -->
-    <section class="py-40 px-6 section-shadow-top section-shadow-bottom" id="earlier-work">
+    <section class="py-20 md:py-40 px-6 section-shadow-top section-shadow-bottom" id="earlier-work">
       <div class="max-w-7xl mx-auto">
         <div class="mb-20">
           <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tighter italic mb-4">Earlier Work</h2>
@@ -1873,7 +1879,7 @@
     </section>
 
     <!-- Contact -->
-    <section class="py-64 px-6 text-center overflow-hidden relative section-shadow-top" id="contact">
+    <section class="py-32 md:py-64 px-6 text-center overflow-hidden relative section-shadow-top" id="contact">
       <div class="max-w-4xl mx-auto relative z-10">
         <h3 class="text-[10px] font-black uppercase tracking-[0.5em] text-brand-gold mb-12">Contact</h3>
         <p class="text-5xl md:text-8xl font-black uppercase tracking-tighter mb-12">Let's build<br />something.</p>
@@ -1899,7 +1905,7 @@
   </main>
 
   <!-- Footer -->
-  <footer class="py-20 px-6 border-t border-white/5 bg-brand-dark">
+  <footer class="py-10 md:py-20 px-6 border-t border-white/5 bg-brand-dark">
     <div
       class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-[10px] font-bold uppercase tracking-[0.3em] text-gray-600">
       <p>&copy; 2026 Nathan Lindig. All rights reserved.</p>
