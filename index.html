@@ -2063,7 +2063,7 @@
       const ctx = canvas.getContext('2d');
 
       const THRESH = 0.50, STEP_INTERVAL = 50;
-      let ZOOM = 2, BLUR = 4;
+      let ZOOM = 2, BLUR = 4, CONTRAST = 20;
       const F_BASE = 0.0545, K_BASE = 0.062;
       const GOLD_PALETTE = [
         [165, 123, 10], [191, 154, 51], [254, 189, 20], [254, 206, 67], [254, 218, 117]
@@ -2188,6 +2188,7 @@
       function initBuffers() {
         ZOOM = window.innerWidth < 768 ? 1.5 : 2;
         BLUR = window.innerWidth < 768 ? 2 : 4;
+        CONTRAST = window.innerWidth < 768 ? 20 : 20;
         DW = Math.round(canvas.width / DPR); DH = Math.round(canvas.height / DPR);
         simW = Math.floor(DW / ZOOM); simH = Math.floor(DH / ZOOM);
         A = new Float32Array(simW * simH); B = new Float32Array(simW * simH);
@@ -2253,7 +2254,7 @@
         // GPU-only threshold: blur softens edges, contrast(20) creates binary-ish mask at 50%
         // Replaces two getImageData readbacks + a 500K-iteration JS loop
         maskCtx.clearRect(0, 0, simW, simH);
-        maskCtx.filter = 'blur(' + (BLUR / ZOOM) + 'px) contrast(20)';
+        maskCtx.filter = 'blur(' + (BLUR / ZOOM) + 'px) contrast(' + CONTRAST + ')';
         maskCtx.drawImage(simCanvas, 0, 0);
         maskCtx.filter = 'none';
         // Composite: Voronoi color layer, clipped by the mask (GPU-scaled to display resolution)
@@ -2353,6 +2354,16 @@
         }
         requestAnimationFrame(warmup);
       }
+
+      // Tuning bridge — exposes live vars to the panel IIFE
+      window.__rdTune = {
+        getBlur: function () { return BLUR; },
+        setBlur: function (v) { BLUR = v; },
+        getContrast: function () { return CONTRAST; },
+        setContrast: function (v) { CONTRAST = v; },
+        getZoom: function () { return ZOOM; },
+        setZoom: function (v) { ZOOM = v; initBuffers(); seed(); initParticles(); }
+      };
     })();
 
     // ===================== PROJECT CAROUSEL =====================
@@ -2474,6 +2485,89 @@
           }
         });
       });
+    })();
+
+    // ===================== RD TUNING PANEL =====================
+    // Press Shift+` to toggle. Lets you tune sharpness params live.
+    (function () {
+      var panel = document.createElement('div');
+      panel.id = 'rd-tune';
+      panel.style.cssText = [
+        'position:fixed;bottom:20px;right:20px;z-index:9999',
+        'background:rgba(5,5,5,0.92);border:1px solid rgba(212,175,55,0.4)',
+        'padding:16px 20px;font-family:monospace;font-size:11px;color:#d4af37',
+        'display:none;min-width:220px;line-height:1.8',
+        'box-shadow:0 4px 24px rgba(0,0,0,0.7)'
+      ].join(';');
+
+      function row(label, id, min, max, step, getValue, setValue) {
+        var wrap = document.createElement('div');
+        wrap.style.display = 'flex'; wrap.style.alignItems = 'center'; wrap.style.gap = '8px'; wrap.style.marginBottom = '6px';
+        var lbl = document.createElement('span'); lbl.style.width = '90px'; lbl.style.color = 'rgba(255,255,255,0.5)'; lbl.textContent = label;
+        var val = document.createElement('span'); val.id = id + '_v'; val.style.width = '36px'; val.style.textAlign = 'right'; val.textContent = getValue().toFixed(1);
+        var sl = document.createElement('input'); sl.type = 'range'; sl.min = min; sl.max = max; sl.step = step; sl.value = getValue();
+        sl.style.flex = '1'; sl.style.accentColor = '#d4af37';
+        sl.addEventListener('input', function () {
+          setValue(parseFloat(sl.value));
+          val.textContent = parseFloat(sl.value).toFixed(1);
+        });
+        wrap.appendChild(lbl); wrap.appendChild(sl); wrap.appendChild(val);
+        return wrap;
+      }
+
+      // These closures reach into the RD IIFE via the shared `window` object — we
+      // expose the mutable vars through a small bridge object instead.
+      // The bridge is set up by the RD IIFE below.
+      function buildPanel() {
+        panel.innerHTML = '';
+        var title = document.createElement('div');
+        title.textContent = 'RD TUNING  (Shift+`)';
+        title.style.cssText = 'font-weight:bold;margin-bottom:10px;letter-spacing:0.15em;font-size:10px';
+        panel.appendChild(title);
+
+        var bridge = window.__rdTune;
+        if (!bridge) { panel.textContent = 'RD not ready'; return; }
+
+        panel.appendChild(row('blur (sim px)', 'blur', 0.5, 8, 0.5,
+          function () { return bridge.getBlur(); },
+          function (v) { bridge.setBlur(v); }));
+        panel.appendChild(row('contrast', 'contrast', 5, 80, 1,
+          function () { return bridge.getContrast(); },
+          function (v) { bridge.setContrast(v); }));
+        panel.appendChild(row('zoom', 'zoom', 1, 4, 0.25,
+          function () { return bridge.getZoom(); },
+          function (v) { bridge.setZoom(v); }));
+
+        var hint = document.createElement('div');
+        hint.style.cssText = 'margin-top:10px;color:rgba(255,255,255,0.25);font-size:9px';
+        hint.textContent = 'Changes are live. Zoom re-seeds the sim.';
+        panel.appendChild(hint);
+      }
+
+      document.body.appendChild(panel);
+
+      var open = false;
+      function toggle() {
+        open = !open;
+        panel.style.display = open ? 'block' : 'none';
+        if (open) buildPanel();
+      }
+
+      // Desktop: Shift+`
+      window.addEventListener('keydown', function (e) {
+        if (e.shiftKey && e.key === '`') toggle();
+      });
+
+      // Mobile: 5 taps in top-right corner (60x60px) within 2s
+      var tapCount = 0, tapTimer = null;
+      window.addEventListener('touchend', function (e) {
+        var t = e.changedTouches[0];
+        if (t.clientX < window.innerWidth - 60 || t.clientY > 60) return;
+        tapCount++;
+        if (tapTimer) clearTimeout(tapTimer);
+        tapTimer = setTimeout(function () { tapCount = 0; }, 2000);
+        if (tapCount >= 5) { tapCount = 0; clearTimeout(tapTimer); toggle(); }
+      }, { passive: true });
     })();
 
     // ===================== CANVAS BOTTOM FADE =====================
