@@ -2062,7 +2062,7 @@
       });
       const ctx = canvas.getContext('2d');
 
-      const THRESH = 0.50, STEP_INTERVAL = 50;
+      let THRESH = 0.50, STEP_INTERVAL = 50;
       let ZOOM = 2, BLUR = 4, CONTRAST = 20;
       const F_BASE = 0.0545, K_BASE = 0.062;
       const GOLD_PALETTE = [
@@ -2254,7 +2254,7 @@
         // GPU-only threshold: blur softens edges, contrast(20) creates binary-ish mask at 50%
         // Replaces two getImageData readbacks + a 500K-iteration JS loop
         maskCtx.clearRect(0, 0, simW, simH);
-        maskCtx.filter = 'blur(' + (BLUR / ZOOM) + 'px) contrast(' + CONTRAST + ')';
+        maskCtx.filter = 'brightness(' + (0.5 / THRESH) + ') blur(' + (BLUR / ZOOM) + 'px) contrast(' + CONTRAST + ')';
         maskCtx.drawImage(simCanvas, 0, 0);
         maskCtx.filter = 'none';
         // Composite: Voronoi color layer, clipped by the mask (GPU-scaled to display resolution)
@@ -2361,8 +2361,9 @@
         setBlur: function (v) { BLUR = v; },
         getContrast: function () { return CONTRAST; },
         setContrast: function (v) { CONTRAST = v; },
-        getZoom: function () { return ZOOM; },
-        setZoom: function (v) { ZOOM = v; initBuffers(); seed(); initParticles(); }
+        getThresh: function () { return THRESH; },
+        setThresh: function (v) { THRESH = v; },
+        redraw: draw
       };
     })();
 
@@ -2528,19 +2529,26 @@
         var bridge = window.__rdTune;
         if (!bridge) { panel.textContent = 'RD not ready'; return; }
 
-        panel.appendChild(row('blur (sim px)', 'blur', 0.5, 8, 0.5,
+        function makeRow(label, id, min, max, step, getter, setter) {
+          return row(label, id, min, max, step, getter, function (v) {
+            setter(v);
+            bridge.redraw();
+          });
+        }
+
+        panel.appendChild(makeRow('blur (sim px)', 'blur', 0, 6, 0.25,
           function () { return bridge.getBlur(); },
           function (v) { bridge.setBlur(v); }));
-        panel.appendChild(row('contrast', 'contrast', 5, 80, 1,
+        panel.appendChild(makeRow('contrast', 'contrast', 5, 80, 1,
           function () { return bridge.getContrast(); },
           function (v) { bridge.setContrast(v); }));
-        panel.appendChild(row('zoom', 'zoom', 1, 4, 0.25,
-          function () { return bridge.getZoom(); },
-          function (v) { bridge.setZoom(v); }));
+        panel.appendChild(makeRow('threshold', 'thresh', 0.15, 0.85, 0.01,
+          function () { return bridge.getThresh(); },
+          function (v) { bridge.setThresh(v); }));
 
         var hint = document.createElement('div');
         hint.style.cssText = 'margin-top:10px;color:rgba(255,255,255,0.25);font-size:9px';
-        hint.textContent = 'Changes are live. Zoom re-seeds the sim.';
+        hint.textContent = 'All changes are live and immediate.';
         panel.appendChild(hint);
       }
 
