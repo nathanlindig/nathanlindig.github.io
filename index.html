@@ -2562,7 +2562,7 @@
       var tapCount = 0, tapTimer = null;
       window.addEventListener('touchend', function (e) {
         var t = e.changedTouches[0];
-        if (t.clientX < window.innerWidth - 60 || t.clientY > 60) return;
+        if (t.clientX > 60 || t.clientY > 60) return;
         tapCount++;
         if (tapTimer) clearTimeout(tapTimer);
         tapTimer = setTimeout(function () { tapCount = 0; }, 2000);
