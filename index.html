@@ -2045,8 +2045,14 @@
       }
       resize();
       let resizeTimeout;
+      let prevResizeW = canvas.width;
       window.addEventListener('resize', () => {
-        resize(); // immediate — prevents CSS stretch during the debounce window
+        const newW = Math.round(window.innerWidth * (window.devicePixelRatio || 1));
+        // Mobile URL-bar show/hide only changes height — ignore those events entirely
+        // to prevent the simulation being wiped every time the user swipes/scrolls.
+        if (Math.abs(newW - prevResizeW) < 10) return;
+        prevResizeW = newW;
+        resize();
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
           initBuffers();
@@ -2056,8 +2062,8 @@
       });
       const ctx = canvas.getContext('2d');
 
-      const BLUR = 4, THRESH = 0.50, STEP_INTERVAL = 50;
-      let ZOOM = 2;
+      const THRESH = 0.50, STEP_INTERVAL = 50;
+      let ZOOM = 2, BLUR = 4;
       const F_BASE = 0.0545, K_BASE = 0.062;
       const GOLD_PALETTE = [
         [165, 123, 10], [191, 154, 51], [254, 189, 20], [254, 206, 67], [254, 218, 117]
@@ -2158,7 +2164,8 @@
         voronoiBlurCtx.clearRect(0, 0, DW, DH);
         voronoiBlurCtx.imageSmoothingEnabled = true;
         voronoiBlurCtx.imageSmoothingQuality = 'high';
-        voronoiBlurCtx.filter = 'blur(50px)';
+        const vBlur = Math.round(Math.min(50, DW * 0.045));
+        voronoiBlurCtx.filter = 'blur(' + vBlur + 'px)';
         voronoiBlurCtx.drawImage(voronoiRawCanvas, 0, 0, DW, DH);
         voronoiBlurCtx.filter = 'none';
       }
@@ -2180,6 +2187,7 @@
 
       function initBuffers() {
         ZOOM = window.innerWidth < 768 ? 1.5 : 2;
+        BLUR = window.innerWidth < 768 ? 2 : 4;
         DW = Math.round(canvas.width / DPR); DH = Math.round(canvas.height / DPR);
         simW = Math.floor(DW / ZOOM); simH = Math.floor(DH / ZOOM);
         A = new Float32Array(simW * simH); B = new Float32Array(simW * simH);
