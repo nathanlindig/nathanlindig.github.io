@@ -2187,7 +2187,7 @@
 
       function initBuffers() {
         ZOOM = window.innerWidth < 768 ? 1.5 : 2;
-        BLUR = window.innerWidth < 768 ? 2 : 4;
+        BLUR = window.innerWidth < 768 ? 0.5 : 4;
         CONTRAST = window.innerWidth < 768 ? 20 : 20;
         DW = Math.round(canvas.width / DPR); DH = Math.round(canvas.height / DPR);
         simW = Math.floor(DW / ZOOM); simH = Math.floor(DH / ZOOM);
@@ -2504,7 +2504,8 @@
         'background:rgba(5,5,5,0.92);border:1px solid rgba(212,175,55,0.4)',
         'padding:16px 20px;font-family:monospace;font-size:11px;color:#d4af37',
         'display:none;min-width:220px;line-height:1.8',
-        'box-shadow:0 4px 24px rgba(0,0,0,0.7)'
+        'box-shadow:0 4px 24px rgba(0,0,0,0.7)',
+        'max-height:80vh;overflow-y:auto;-webkit-overflow-scrolling:touch'
       ].join(';');
 
       function row(label, id, min, max, step, getValue, setValue) {
