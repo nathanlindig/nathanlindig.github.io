@@ -148,6 +148,25 @@
       grid-template-rows: 1fr;
     }
 
+    /* Mobile carousel — cards always fully expanded (no data-state needed) */
+    .proj-track .proj-card .proj-body {
+      grid-template-rows: 1fr;
+    }
+
+    .proj-track .proj-card .proj-teaser {
+      -webkit-line-clamp: unset;
+      overflow: visible;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.9375rem;
+      line-height: 1.65;
+    }
+
+    .proj-track .proj-card .proj-title {
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
     /* Tags */
     .proj-tags {
       display: flex;
@@ -2037,7 +2056,8 @@
       });
       const ctx = canvas.getContext('2d');
 
-      const ZOOM = 2, BLUR = 4, THRESH = 0.50, STEP_INTERVAL = 50;
+      const BLUR = 4, THRESH = 0.50, STEP_INTERVAL = 50;
+      let ZOOM = 2;
       const F_BASE = 0.0545, K_BASE = 0.062;
       const GOLD_PALETTE = [
         [165, 123, 10], [191, 154, 51], [254, 189, 20], [254, 206, 67], [254, 218, 117]
@@ -2159,6 +2179,7 @@
       }
 
       function initBuffers() {
+        ZOOM = window.innerWidth < 768 ? 1.5 : 2;
         DW = Math.round(canvas.width / DPR); DH = Math.round(canvas.height / DPR);
         simW = Math.floor(DW / ZOOM); simH = Math.floor(DH / ZOOM);
         A = new Float32Array(simW * simH); B = new Float32Array(simW * simH);
