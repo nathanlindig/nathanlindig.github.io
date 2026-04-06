@@ -2187,7 +2187,7 @@
 
       function initBuffers() {
         ZOOM = window.innerWidth < 768 ? 1.5 : 2;
-        BLUR = window.innerWidth < 768 ? 0.5 : 4;
+        BLUR = window.innerWidth < 768 ? 0.3 : 4;
         CONTRAST = window.innerWidth < 768 ? 20 : 20;
         DW = Math.round(canvas.width / DPR); DH = Math.round(canvas.height / DPR);
         simW = Math.floor(DW / ZOOM); simH = Math.floor(DH / ZOOM);
@@ -2650,21 +2650,19 @@
         if (open) buildPanel();
       }
 
+      // Panel access disabled — uncomment to re-enable:
       // Desktop: Shift+`
-      window.addEventListener('keydown', function (e) {
-        if (e.shiftKey && e.key === '`') toggle();
-      });
-
-      // Mobile: 5 taps in top-right corner (60x60px) within 2s
-      var tapCount = 0, tapTimer = null;
-      window.addEventListener('touchend', function (e) {
-        var t = e.changedTouches[0];
-        if (t.clientX > 60 || t.clientY > 60) return;
-        tapCount++;
-        if (tapTimer) clearTimeout(tapTimer);
-        tapTimer = setTimeout(function () { tapCount = 0; }, 2000);
-        if (tapCount >= 5) { tapCount = 0; clearTimeout(tapTimer); toggle(); }
-      }, { passive: true });
+      // window.addEventListener('keydown', function (e) {
+      //   if (e.shiftKey && e.key === '`') toggle();
+      // });
+      // Mobile: 5 taps top-left corner
+      // window.addEventListener('touchend', function (e) {
+      //   var t = e.changedTouches[0];
+      //   if (t.clientX > 60 || t.clientY > 60) return;
+      //   tapCount++; if (tapTimer) clearTimeout(tapTimer);
+      //   tapTimer = setTimeout(function () { tapCount = 0; }, 2000);
+      //   if (tapCount >= 5) { tapCount = 0; clearTimeout(tapTimer); toggle(); }
+      // }, { passive: true });
     })();
 
     // ===================== CANVAS BOTTOM FADE =====================
