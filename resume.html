@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Nathan Lindig | Resume</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#050505',
+                        'brand-navy': '#0a0a0c',
+                        'brand-gold': '#d4af37',
+                        'brand-accent': '#3b82f6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style data-purpose="custom-styling">
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap');
+
+        body {
+            background-color: #050505;
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+        }
+
+        .pdf-container {
+            width: 100%;
+            height: 100vh;
+            border: none;
+        }
+    </style>
+</head>
+
+<body class="bg-brand-dark text-white">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-black text-white mb-2">Nathan Lindig</h1>
+            <p class="text-xl text-brand-gold mb-4">Resume</p>
+        </header>
+
+        <div class="flex justify-center">
+            <embed src="resume.pdf" type="application/pdf" class="pdf-container" />
+        </div>
+
+        <div class="text-center mt-4">
+            <p class="text-gray-400 text-sm">If the PDF doesn't load, <a href="resume.pdf"
+                    class="text-brand-gold hover:text-white" download>download it here</a>.</p>
+        </div>
+    </div>
+</body>
+
+</html>
