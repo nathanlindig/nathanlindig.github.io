@@ -444,11 +444,13 @@
       display: block;
     }
 
-    .reel-embed iframe {
+    .reel-embed iframe,
+    .reel-embed video {
       width: 100%;
       height: 100%;
       border: none;
       display: block;
+      background: #0d0d10;
     }
 
     .reel-label {
@@ -1818,8 +1820,10 @@
             my career, prior to my time at Meta.</p>
         </div>
         <div class="reel-grid" id="reel-grid">
+          <!-- data-video: self-hosted MP4 URL (Cloudflare R2). Leave empty to fall back to the Vimeo embed. -->
 
-          <div class="reel-tile" data-vimeo="499715996">
+          <div class="reel-tile" data-vimeo="499715996"
+            data-video="https://pub-a2f2fcdf21bf4a5ab48687afaafd9e22.r2.dev/NathanLindig_EnvironmentArtist_DemoReel.mp4">
             <div class="reel-thumb">
               <div class="reel-play-icon">
                 <svg fill="currentColor" height="22" viewBox="0 0 24 24" width="22">
@@ -1835,7 +1839,8 @@
             <p class="reel-label">Environment Artist Demo Reel</p>
           </div>
 
-          <div class="reel-tile" data-vimeo="502238823">
+          <div class="reel-tile" data-vimeo="502238823"
+            data-video="https://pub-a2f2fcdf21bf4a5ab48687afaafd9e22.r2.dev/NathanLindig_Rigging_DemoReel.mp4">
             <div class="reel-thumb">
               <div class="reel-play-icon">
                 <svg fill="currentColor" height="22" viewBox="0 0 24 24" width="22">
@@ -1851,7 +1856,8 @@
             <p class="reel-label">Rigging Demo Reel</p>
           </div>
 
-          <div class="reel-tile" data-vimeo="322270127">
+          <div class="reel-tile" data-vimeo="322270127"
+            data-video="https://pub-a2f2fcdf21bf4a5ab48687afaafd9e22.r2.dev/modeling-reel.mp4">
             <div class="reel-thumb">
               <div class="reel-play-icon">
                 <svg fill="currentColor" height="22" viewBox="0 0 24 24" width="22">
@@ -1911,26 +1917,43 @@
   </footer>
 
   <script>
-      // Reel grid — expand clicked tile to full width and load Vimeo embed
+      // Reel grid — expand clicked tile and play its video.
+      // Uses the self-hosted MP4 from data-video when set, otherwise falls back to the Vimeo embed.
       (function () {
         var tiles = document.querySelectorAll('.reel-tile');
+
+        function deactivate(t) {
+          t.classList.remove('is-active');
+          var iframe = t.querySelector('iframe');
+          if (iframe) { iframe.src = ''; iframe.style.display = ''; }
+          var video = t.querySelector('video');
+          if (video) { video.pause(); video.remove(); }
+        }
+
         tiles.forEach(function (tile) {
           tile.querySelector('.reel-thumb').addEventListener('click', function () {
             // Deactivate any currently active tile and stop its video
             tiles.forEach(function (t) {
-              if (t.classList.contains('is-active')) {
-                t.classList.remove('is-active');
-                var iframe = t.querySelector('iframe');
-                if (iframe) iframe.src = '';
-              }
+              if (t.classList.contains('is-active')) deactivate(t);
             });
             // Activate this tile
             tile.classList.add('is-active');
-            var id = tile.dataset.vimeo;
-            var iframe = tile.querySelector('iframe');
-            if (iframe) {
-              iframe.src = 'https://player.vimeo.com/video/' + id
-                + '?autoplay=1&title=0&byline=0&portrait=0&color=d4af37&dnt=1';
+            if (tile.dataset.video) {
+              var vframe = tile.querySelector('iframe');
+              if (vframe) vframe.style.display = 'none';
+              var video = document.createElement('video');
+              video.src = tile.dataset.video;
+              video.controls = true;
+              video.autoplay = true;
+              video.playsInline = true;
+              video.preload = 'metadata';
+              tile.querySelector('.reel-embed').appendChild(video);
+            } else {
+              var iframe = tile.querySelector('iframe');
+              if (iframe) {
+                iframe.src = 'https://player.vimeo.com/video/' + tile.dataset.vimeo
+                  + '?autoplay=1&title=0&byline=0&portrait=0&color=d4af37&dnt=1';
+              }
             }
           });
         });
